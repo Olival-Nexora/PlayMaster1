@@ -2,119 +2,94 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Gerador de Wallpaper</title>
+  <title>Gerador de Wallpaper - StreamDroid</title>
   <style>
-    body {
-      margin: 0;
-      background: linear-gradient(to bottom right, #ff0000, #ffffff); /* Degradê configurável */
-      font-family: Arial, sans-serif;
-    }
-
-    .wallpaper {
-      width: 1080px;
-      height: 1350px;
-      position: relative;
-      margin: 20px auto;
-      border: 2px solid #000;
-    }
-
-    .saudacao {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 270px; /* Altura da 1ª faixa */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 50px;
-      text-align: center;
-    }
-
-    .time-v {
-      position: absolute;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-around;
-      height: 810px; /* Setores 3, 5, 7 = 3 faixas */
-      width: 50%;
-      left: 0;
-      top: 270px; /* Começa na 2ª faixa */
-    }
-
-    .time-p {
-      position: absolute;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-around;
-      height: 540px; /* Setores 4 e 6 = 2 faixas */
-      width: 50%;
-      right: 0;
-      top: 270px; /* Começa na 2ª faixa */
-    }
-
-    .autor {
-      position: absolute;
-      bottom: 270px; /* Acima do rodapé */
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      height: 270px; /* Setor 8 */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-    }
-
-    .rodape {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      height: 270px; /* Setores 9 e 10 */
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,0.3);
-      font-size: 20px;
-    }
-
-    .imagem {
-      width: 65%;
-      height: auto;
-      border: 2px solid white;
-    }
+    body { font-family: Arial, sans-serif; text-align: center; background: #111; color: white; margin: 0; }
+    #preview { position: relative; width: 360px; height: 450px; background: linear-gradient(45deg, #222, #444); margin: 20px auto; display: flex; flex-direction: column; }
+    .section { display: flex; justify-content: center; align-items: center; text-align: center; padding: 5px; box-sizing: border-box; }
+    #saudacao { height: 20%; font-size: 20px; }
+    #timeVencedor { height: 30%; }
+    #timePerdedor { height: 20%; }
+    #frase { height: 10%; font-size: 12px; }
+    #rodape { height: 20%; font-size: 10px; background: rgba(0,0,0,0.5); }
+    img { max-height: 100%; max-width: 100%; object-fit: contain; }
+    select, input, button { margin: 5px; }
   </style>
 </head>
 <body>
 
-<div class="wallpaper">
-  <div class="saudacao">
-    <span>Perdeu de novo! Kkkkkkk!</span>
-  </div>
+<h1>Gerador de Wallpaper - StreamDroid</h1>
 
-  <div class="time-v">
-    <img src="time_v1.png" alt="Time Vencedor" class="imagem">
-    <img src="time_v2.png" alt="Time Vencedor" class="imagem">
-    <img src="time_v3.png" alt="Time Vencedor" class="imagem">
-  </div>
+<!-- Seletores -->
+<label>Saudação:</label>
+<select id="saudacaoSelect">
+  <option>Bom dia</option>
+  <option>Boa tarde</option>
+  <option>Boa noite</option>
+  <option>Perdeu de Novo!</option>
+  <option>Olha a Segunda Divisão!</option>
+  <option>Freguesia Pura!</option>
+</select>
 
-  <div class="time-p">
-    <img src="time_p1.png" alt="Time Perdedor" class="imagem">
-    <img src="time_p2.png" alt="Time Perdedor" class="imagem">
-  </div>
+<br>
 
-  <div class="autor">
-    <span>Por: Seu Nome ou Frase</span>
-  </div>
+<label>Time Vencedor:</label>
+<select id="timeVencedorSelect">
+  <option value="https://via.placeholder.com/150/00ff00?text=Vencedor">Exemplo V</option>
+</select>
 
-  <div class="rodape">
-    <img src="streamdroid_logo.png" alt="Logo StreamDroid" style="width: 100px;">
-    <p>Crie sua imagem: <a href="https://bit.ly/cria_wallpaper" target="_blank" style="color: #fff;">https://bit.ly/cria_wallpaper</a></p>
+<label>Time Perdedor:</label>
+<select id="timePerdedorSelect">
+  <option value="https://via.placeholder.com/150/ff0000?text=Perdedor">Exemplo P</option>
+</select>
+
+<br>
+
+<label>Nome/Frase (máx 30):</label>
+<input type="text" id="fraseInput" maxlength="30">
+
+<br>
+
+<button onclick="gerarPreview()">Gerar Preview</button>
+<button onclick="downloadImagem()">Download</button>
+
+<!-- Preview -->
+<div id="preview">
+  <div id="saudacao" class="section"></div>
+  <div id="timeVencedor" class="section"></div>
+  <div id="timePerdedor" class="section"></div>
+  <div id="frase" class="section"></div>
+  <div id="rodape" class="section">
+    <img src="https://via.placeholder.com/50x20?text=Logo" alt="Logo">
+    <p>Crie sua imagem: <a href="https://bit.ly/cria_wallpaper" style="color:yellow;">https://bit.ly/cria_wallpaper</a></p>
   </div>
 </div>
+
+<script>
+  function gerarPreview() {
+    document.getElementById('saudacao').innerText = document.getElementById('saudacaoSelect').value;
+
+    let vencedorUrl = document.getElementById('timeVencedorSelect').value;
+    let perdedorUrl = document.getElementById('timePerdedorSelect').value;
+
+    document.getElementById('timeVencedor').innerHTML = `<img src="${vencedorUrl}" alt="Vencedor">`;
+    document.getElementById('timePerdedor').innerHTML = `<img src="${perdedorUrl}" alt="Perdedor">`;
+
+    document.getElementById('frase').innerText = document.getElementById('fraseInput').value;
+  }
+
+  function downloadImagem() {
+    html2canvas(document.getElementById("preview")).then(canvas => {
+      let link = document.createElement('a');
+      link.download = 'wallpaper.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    });
+  }
+</script>
+
+<!-- Biblioteca para conversão do preview em imagem -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 </body>
 </html>
