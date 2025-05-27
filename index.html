@@ -2,139 +2,157 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>StreamPlus - Gerador de Wallpaper</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gerador de Wallpaper Personalizado</title>
   <style>
-    body { margin: 0; font-family: sans-serif; background: #000; color: #fff; text-align: center; }
-
-    .container {
-      width: 90%;
-      max-width: 1080px;
-      margin: 20px auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background: linear-gradient(135deg, #1e1e1e, #333);
+      color: #fff;
     }
-
-    select, input, button { margin: 5px; padding: 10px; }
-
-    .wallpaper {
-      width: 1080px;
-      height: 1350px;
-      display: flex;
-      flex-direction: column;
-      background: linear-gradient(to bottom, red, white);
+    h2 {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+    }
+    input, select {
+      margin-top: 5px;
+      padding: 5px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+    }
+    canvas {
       margin-top: 20px;
       border: 2px solid #fff;
-      position: relative;
+      border-radius: 10px;
     }
-
-    .setor {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-bottom: 1px solid rgba(255,255,255,0.2);
-      overflow: hidden;
-      padding: 10px;
+    a#downloadLink {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: #4caf50;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background 0.3s;
     }
-
-    .imagem-time { max-width: 80%; max-height: 80%; object-fit: contain; }
-    .saudacao { font-size: 3em; font-weight: bold; }
-    .frase { font-size: 2em; }
-    .rodape { font-size: 1em; flex-direction: column; }
-
-    .rodape img { width: 50px; margin: 10px 0; }
+    a#downloadLink:hover {
+      background: #45a049;
+    }
   </style>
 </head>
-
 <body>
 
-<div class="container">
+  <section class="seletor-wallpaper">
+    <h2>Crie seu Wallpaper Personalizado</h2>
 
-  <h1>Gerador de Wallpaper</h1>
+    <label for="time">Escolha seu time:</label>
+    <select id="time">
+      <option value="Fla.png">Flamengo</option>
+      <option value="Pal.png">Palmeiras</option>
+      <option value="Cor.png">Corinthians</option>
+      <option value="San.png">Santos</option>
+      <!-- Adicione mais conforme quiser -->
+    </select>
 
-  <label>Cor de Fundo:</label>
-  <select id="corFundo">
-    <option value="red">Vermelho</option>
-    <option value="blue">Azul</option>
-    <option value="black">Preto</option>
-    <option value="green">Verde</option>
-    <option value="yellow">Amarelo</option>
-  </select>
+    <label for="nome">Digite seu nome:</label>
+    <input type="text" id="nome" placeholder="Seu nome">
 
-  <label>Saudação:</label>
-  <select id="saudacao">
-    <option>Bom dia</option>
-    <option>Boa tarde</option>
-    <option>Boa noite</option>
-    <option>Perdeu de Novo!</option>
-    <option>Olha a Segunda Divisão!</option>
-    <option>Freguesia Pura!</option>
-  </select>
+    <label for="corTexto">Escolha a cor do texto:</label>
+    <input type="color" id="corTexto" value="#ffffff">
 
-  <label>Time Vencedor:</label>
-  <select id="timeV">
-    <option value="flamengo">Flamengo</option>
-    <option value="palmeiras">Palmeiras</option>
-    <option value="saopaulo">São Paulo</option>
-    <option value="corinthians">Corinthians</option>
-  </select>
+    <label for="fonteTexto">Escolha a fonte:</label>
+    <select id="fonteTexto">
+      <option value="Arial">Arial</option>
+      <option value="Impact">Impact</option>
+      <option value="Comic Sans MS">Comic Sans</option>
+      <option value="Courier New">Courier</option>
+    </select>
 
-  <label>Time Perdedor:</label>
-  <select id="timeP">
-    <option value="flamengo">Flamengo</option>
-    <option value="palmeiras">Palmeiras</option>
-    <option value="saopaulo">São Paulo</option>
-    <option value="corinthians">Corinthians</option>
-  </select>
+    <label for="posicaoTexto">Posição do nome:</label>
+    <select id="posicaoTexto">
+      <option value="top">Superior</option>
+      <option value="middle">Central</option>
+      <option value="bottom" selected>Inferior</option>
+    </select>
 
-  <label>Sua frase (até 30 caracteres):</label>
-  <input type="text" id="frase" maxlength="30">
+    <label for="opacidade">Opacidade do escudo:</label>
+    <input type="range" id="opacidade" min="0.1" max="1" step="0.1" value="1">
 
-  <button onclick="gerar()">Gerar Wallpaper</button>
-  <button onclick="download()">Baixar Imagem</button>
+    <canvas id="canvas" width="1080" height="1920"></canvas>
 
-  <div class="wallpaper" id="wallpaper">
-    <div class="setor" id="setorSaudacao"></div>
-    <div class="setor" id="setorVencedor"></div>
-    <div class="setor" id="setorPerdedor"></div>
-    <div class="setor" id="setorFrase"></div>
-    <div class="setor rodape" id="setorRodape">
-      <img src="logo-streamdroid.png" alt="StreamDroid">
-      <p>Crie sua imagem: <a href="https://bit.ly/cria_wallpaper" style="color: #fff;">https://bit.ly/cria_wallpaper</a></p>
-    </div>
-  </div>
+    <a id="downloadLink" download="wallpaper.png">Baixar Wallpaper</a>
+  </section>
 
-</div>
+  <script>
+    const time = document.getElementById('time');
+    const nome = document.getElementById('nome');
+    const corTexto = document.getElementById('corTexto');
+    const fonteTexto = document.getElementById('fonteTexto');
+    const posicaoTexto = document.getElementById('posicaoTexto');
+    const opacidade = document.getElementById('opacidade');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const link = document.getElementById('downloadLink');
 
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    function atualizarWallpaper() {
+      const img = new Image();
+      img.crossOrigin = "anonymous"; // Caso use imagens de servidores externos
+      img.src = time.value;
 
-<script>
-  function gerar() {
-    const saudacao = document.getElementById('saudacao').value;
-    const timeV = document.getElementById('timeV').value;
-    const timeP = document.getElementById('timeP').value;
-    const frase = document.getElementById('frase').value;
-    const corFundo = document.getElementById('corFundo').value;
+      img.onload = function() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    document.getElementById('wallpaper').style.background = `linear-gradient(to bottom, ${corFundo}, white)`;
+        // Ajusta opacidade do escudo
+        ctx.globalAlpha = parseFloat(opacidade.value);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        ctx.globalAlpha = 1;
 
-    document.getElementById('setorSaudacao').innerHTML = `<div class='saudacao'>${saudacao}</div>`;
-    document.getElementById('setorVencedor').innerHTML = `<img class='imagem-time' src='${timeV}.png'>`;
-    document.getElementById('setorPerdedor').innerHTML = `<img class='imagem-time' src='${timeP}.png'>`;
-    document.getElementById('setorFrase').innerHTML = `<div class='frase'>${frase}</div>`;
-  }
+        const texto = nome.value.trim() || "Seu Nome Aqui";
+        const cor = corTexto.value;
+        const fonte = fonteTexto.value;
+        const posicao = posicaoTexto.value;
 
-  function download() {
-    html2canvas(document.getElementById('wallpaper')).then(function(canvas) {
-      const link = document.createElement('a');
-      link.download = 'wallpaper.png';
-      link.href = canvas.toDataURL('image/png');
-      link.click();
+        let y;
+        if (posicao === "top") y = 150;
+        else if (posicao === "middle") y = canvas.height / 2;
+        else y = canvas.height - 150;
+
+        ctx.font = `bold 60px ${fonte}`;
+        ctx.fillStyle = cor;
+        ctx.strokeStyle = "#000";
+        ctx.lineWidth = 4;
+        ctx.textAlign = "center";
+
+        // Sombra no texto
+        ctx.shadowColor = "rgba(0,0,0,0.5)";
+        ctx.shadowBlur = 10;
+        ctx.shadowOffsetX = 4;
+        ctx.shadowOffsetY = 4;
+
+        ctx.strokeText(texto, canvas.width / 2, y);
+        ctx.fillText(texto, canvas.width / 2, y);
+
+        ctx.shadowColor = "transparent"; // limpa sombra
+
+        // Atualiza link de download
+        link.href = canvas.toDataURL();
+      }
+    }
+
+    // Atualiza ao mudar qualquer configuração
+    [time, nome, corTexto, fonteTexto, posicaoTexto, opacidade].forEach(el => {
+      el.addEventListener('input', atualizarWallpaper);
     });
-  }
-</script>
+
+    // Gera inicialmente
+    atualizarWallpaper();
+  </script>
 
 </body>
 </html>
