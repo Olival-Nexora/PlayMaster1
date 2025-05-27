@@ -6,191 +6,115 @@
   <style>
     body {
       margin: 0;
+      background: linear-gradient(to bottom right, #ff0000, #ffffff); /* Degradê configurável */
       font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom right, white, grey);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
     }
+
     .wallpaper {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: repeat(5, 1fr);
-      width: 540px;  /* metade de 1080 */
-      height: 675px; /* metade de 1350 */
-      border: 2px solid #000;
-      background: linear-gradient(to bottom, #fff, #ccc);
+      width: 1080px;
+      height: 1350px;
       position: relative;
+      margin: 20px auto;
+      border: 2px solid #000;
     }
-    .setor {
-      border: 1px solid rgba(0,0,0,0.1);
+
+    .saudacao {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 270px; /* Altura da 1ª faixa */
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
+      font-size: 50px;
       text-align: center;
-      padding: 5px;
-      overflow: hidden;
     }
-    #setor1, #setor2 {
-      font-size: 1.2em;
-      font-weight: bold;
-    }
-    #rodape {
-      grid-column: 1 / span 2;
-      font-size: 0.8em;
-    }
-    .controls {
-      margin-top: 20px;
+
+    .time-v {
+      position: absolute;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      width: 300px;
+      align-items: center;
+      justify-content: space-around;
+      height: 810px; /* Setores 3, 5, 7 = 3 faixas */
+      width: 50%;
+      left: 0;
+      top: 270px; /* Começa na 2ª faixa */
     }
-    select, input, button {
-      padding: 8px;
-      font-size: 1em;
+
+    .time-p {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-around;
+      height: 540px; /* Setores 4 e 6 = 2 faixas */
+      width: 50%;
+      right: 0;
+      top: 270px; /* Começa na 2ª faixa */
+    }
+
+    .autor {
+      position: absolute;
+      bottom: 270px; /* Acima do rodapé */
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      height: 270px; /* Setor 8 */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .rodape {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 270px; /* Setores 9 e 10 */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.3);
+      font-size: 20px;
+    }
+
+    .imagem {
+      width: 65%;
+      height: auto;
+      border: 2px solid white;
     }
   </style>
 </head>
 <body>
 
-<h1>Gerador de Wallpaper</h1>
+<div class="wallpaper">
+  <div class="saudacao">
+    <span>Perdeu de novo! Kkkkkkk!</span>
+  </div>
 
-<div class="wallpaper" id="wallpaper">
-  <div class="setor" id="setor1"></div>
-  <div class="setor" id="setor2"></div>
-  <div class="setor" id="setor3"></div>
-  <div class="setor" id="setor4"></div>
-  <div class="setor" id="setor5"></div>
-  <div class="setor" id="setor6"></div>
-  <div class="setor" id="setor7"></div>
-  <div class="setor" id="setor8"></div>
-  <div class="setor" id="setor9"></div>
-  <div class="setor" id="setor10"></div>
+  <div class="time-v">
+    <img src="time_v1.png" alt="Time Vencedor" class="imagem">
+    <img src="time_v2.png" alt="Time Vencedor" class="imagem">
+    <img src="time_v3.png" alt="Time Vencedor" class="imagem">
+  </div>
+
+  <div class="time-p">
+    <img src="time_p1.png" alt="Time Perdedor" class="imagem">
+    <img src="time_p2.png" alt="Time Perdedor" class="imagem">
+  </div>
+
+  <div class="autor">
+    <span>Por: Seu Nome ou Frase</span>
+  </div>
+
+  <div class="rodape">
+    <img src="streamdroid_logo.png" alt="Logo StreamDroid" style="width: 100px;">
+    <p>Crie sua imagem: <a href="https://bit.ly/cria_wallpaper" target="_blank" style="color: #fff;">https://bit.ly/cria_wallpaper</a></p>
+  </div>
 </div>
-
-<div class="controls">
-  <label>
-    Saudação:
-    <select id="saudacao">
-      <option>Bom dia</option>
-      <option>Boa tarde</option>
-      <option>Boa noite</option>
-      <option>Perdeu de Novo!</option>
-      <option>Olha a Segunda Divisão!</option>
-      <option>Freguesia Pura!</option>
-    </select>
-  </label>
-
-  <label>
-    Time Vencedor:
-    <select id="timeV">
-      <option>Flamengo V</option>
-      <option>Palmeiras V</option>
-      <option>São Paulo V</option>
-      <option>Corinthians V</option>
-      <option>Vasco V</option>
-      <option>Fluminense V</option>
-      <option>Mirassol V</option>
-      <option>Santos V</option>
-      <option>Grêmio V</option>
-      <option>Internacional V</option>
-      <option>Juventude V</option>
-      <option>Atlético V</option>
-      <option>Cruzeiro V</option>
-      <option>Botafogo V</option>
-      <option>Fortaleza V</option>
-      <option>Ceará V</option>
-      <option>Vitória V</option>
-      <option>Bahia V</option>
-      <option>Bragantino V</option>
-      <option>Sport V</option>
-    </select>
-  </label>
-
-  <label>
-    Time Perdedor:
-    <select id="timeP">
-      <option>Flamengo P</option>
-      <option>Palmeiras P</option>
-      <option>São Paulo P</option>
-      <option>Corinthians P</option>
-      <option>Vasco P</option>
-      <option>Fluminense P</option>
-      <option>Mirassol P</option>
-      <option>Santos P</option>
-      <option>Grêmio P</option>
-      <option>Internacional P</option>
-      <option>Juventude P</option>
-      <option>Atlético P</option>
-      <option>Cruzeiro P</option>
-      <option>Botafogo P</option>
-      <option>Fortaleza P</option>
-      <option>Ceará P</option>
-      <option>Vitória P</option>
-      <option>Bahia P</option>
-      <option>Bragantino P</option>
-      <option>Sport P</option>
-    </select>
-  </label>
-
-  <label>
-    Nome do criador:
-    <input type="text" id="autor" maxlength="30" placeholder="Seu nome">
-  </label>
-
-  <label>
-    Cor de fundo:
-    <select id="corFundo">
-      <option value="red">Vermelho</option>
-      <option value="blue">Azul</option>
-      <option value="black">Preto</option>
-      <option value="green">Verde</option>
-      <option value="yellow">Amarelo</option>
-    </select>
-  </label>
-
-  <button onclick="gerarWallpaper()">Gerar Wallpaper</button>
-  <button onclick="baixar()">Baixar Wallpaper</button>
-</div>
-
-<script>
-  function gerarWallpaper() {
-    const saudacao = document.getElementById('saudacao').value;
-    const timeV = document.getElementById('timeV').value;
-    const timeP = document.getElementById('timeP').value;
-    const autor = document.getElementById('autor').value;
-    const corFundo = document.getElementById('corFundo').value;
-
-    document.getElementById('wallpaper').style.background = `linear-gradient(to bottom right, ${corFundo}, white)`;
-
-    document.getElementById('setor1').innerText = saudacao;
-    document.getElementById('setor2').innerText = saudacao;
-
-    // Para uma imagem de vencedor + perdedor
-    document.getElementById('setor3').innerText = timeV;
-    document.getElementById('setor4').innerText = timeP;
-    document.getElementById('setor5').innerText = timeV;
-    document.getElementById('setor6').innerText = timeP;
-    document.getElementById('setor7').innerText = timeV;
-    document.getElementById('setor8').innerText = autor;
-
-    document.getElementById('setor9').innerHTML = '<b>StreamDroid</b>';
-    document.getElementById('setor10').innerHTML = '<a href="https://bit.ly/cria_wallpaper" target="_blank">Crie sua imagem</a>';
-  }
-
-  function baixar() {
-    html2canvas(document.getElementById('wallpaper')).then(canvas => {
-      const link = document.createElement('a');
-      link.download = 'wallpaper.png';
-      link.href = canvas.toDataURL();
-      link.click();
-    });
-  }
-</script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 </body>
 </html>
