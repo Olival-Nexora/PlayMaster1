@@ -6,47 +6,62 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #f0f0f0;
-            padding: 20px;
+            background: linear-gradient(135deg, #ece9e6, #ffffff);
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding: 20px;
+            margin: 0;
         }
+
         h1 {
             margin-bottom: 20px;
         }
-        .controls {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+
+        #controls {
+            display: flex;
+            flex-wrap: wrap;
             gap: 10px;
-            max-width: 500px;
+            justify-content: center;
             margin-bottom: 20px;
+            max-width: 800px;
         }
-        label {
+
+        .control-group {
             display: flex;
             flex-direction: column;
-            font-size: 14px;
+            gap: 5px;
+            min-width: 150px;
         }
-        input, select {
-            padding: 5px;
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"], select, input[type="color"] {
+            padding: 8px;
             border-radius: 5px;
             border: 1px solid #ccc;
         }
+
         button {
-            padding: 10px 15px;
+            padding: 12px 20px;
             border: none;
             border-radius: 8px;
-            background: #4CAF50;
+            background-color: #4CAF50;
             color: white;
-            font-weight: bold;
             cursor: pointer;
-            transition: background 0.3s;
+            font-size: 16px;
+            margin-top: 10px;
         }
+
         button:hover {
-            background: #45a049;
+            background-color: #45a049;
         }
+
         canvas {
             border: 1px solid #ccc;
+            margin-top: 20px;
             max-width: 100%;
             height: auto;
         }
@@ -54,137 +69,136 @@
 </head>
 <body>
 
-<h1>Gerador de Wallpaper</h1>
+    <h1>Gerador de Wallpaper</h1>
 
-<div class="controls">
-    <label>Saudação:
-        <input type="text" id="greeting" maxlength="30">
-    </label>
-    <label>Time Vencedor:
-        <input type="text" id="winner" maxlength="30">
-    </label>
-    <label>Placar:
-        <input type="text" id="score" maxlength="10" placeholder="Ex: 2 x 0">
-    </label>
-    <label>Cor do Placar:
-        <input type="color" id="scoreColor" value="#FF0000">
-    </label>
-    <label>Tamanho do Placar:
-        <select id="scoreSize">
-            <option value="30">Pequeno</option>
-            <option value="50" selected>Médio</option>
-            <option value="80">Grande</option>
-        </select>
-    </label>
-    <label>Time Perdedor:
-        <input type="text" id="loser" maxlength="30">
-    </label>
-    <label>Mensagem:
-        <input type="text" id="message" maxlength="30">
-    </label>
-    <label>Rodapé:
-        <input type="text" id="footer" maxlength="50">
-    </label>
-    <label>Cor da Letra:
-        <input type="color" id="textColor" value="#000000">
-    </label>
-    <label>Fonte:
-        <select id="fontFamily">
-            <option value="Arial">Arial</option>
-            <option value="Verdana">Verdana</option>
-            <option value="Georgia">Georgia</option>
-            <option value="Courier New">Courier New</option>
-        </select>
-    </label>
-    <label>Tamanho do Texto:
-        <select id="textSize">
-            <option value="20">Pequeno</option>
-            <option value="30" selected>Médio</option>
-            <option value="50">Grande</option>
-        </select>
-    </label>
-    <label>Imagem de Fundo:
-        <input type="file" id="bgImage" accept="image/*">
-    </label>
-</div>
+    <div id="controls">
 
-<div>
-    <button onclick="generate()">Gerar</button>
-    <button onclick="download()">Baixar</button>
-</div>
+        <div class="control-group">
+            <label>Saudação</label>
+            <input type="text" id="saudacao" maxlength="30">
+        </div>
 
-<br>
-<canvas id="wallpaper" width="1080" height="1350"></canvas>
+        <div class="control-group">
+            <label>Time Vencedor</label>
+            <input type="text" id="vencedor" maxlength="30">
+        </div>
 
-<script>
-    let backgroundImage = null;
+        <div class="control-group">
+            <label>Placar</label>
+            <input type="text" id="placar" maxlength="10">
+        </div>
 
-    document.getElementById('bgImage').addEventListener('change', function(e) {
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            const img = new Image();
-            img.onload = function() {
-                backgroundImage = img;
-                generate();
-            };
-            img.src = event.target.result;
-        };
-        reader.readAsDataURL(e.target.files[0]);
-    });
+        <div class="control-group">
+            <label>Time Perdedor</label>
+            <input type="text" id="perdedor" maxlength="30">
+        </div>
 
-    function generate() {
-        const canvas = document.getElementById('wallpaper');
+        <div class="control-group">
+            <label>Texto extra</label>
+            <input type="text" id="textoExtra" maxlength="30">
+        </div>
+
+        <div class="control-group">
+            <label>Rodapé</label>
+            <input type="text" id="rodape" maxlength="50">
+        </div>
+
+        <div class="control-group">
+            <label>Cor das Letras</label>
+            <input type="color" id="corTexto" value="#000000">
+        </div>
+
+        <div class="control-group">
+            <label>Fonte</label>
+            <select id="fonte">
+                <option>Arial</option>
+                <option>Verdana</option>
+                <option>Georgia</option>
+                <option>Courier New</option>
+                <option>Impact</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label>Tamanho da Fonte</label>
+            <select id="tamanhoFonte">
+                <option value="16">Pequeno</option>
+                <option value="24">Médio</option>
+                <option value="36">Grande</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label>Imagem de Fundo</label>
+            <input type="file" id="imagemFundo" accept="image/*">
+        </div>
+
+    </div>
+
+    <button onclick="gerarWallpaper()">Gerar</button>
+    <button onclick="baixarImagem()">Baixar</button>
+
+    <canvas id="canvas" width="1080" height="1350"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
+        let imagem = null;
 
-        // Limpar
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        document.getElementById('imagemFundo').addEventListener('change', function(e) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                imagem = new Image();
+                imagem.onload = gerarWallpaper;
+                imagem.src = event.target.result;
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        });
 
-        // Fundo
-        if (backgroundImage) {
-            ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
-        } else {
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        function gerarWallpaper() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Fundo
+            if (imagem) {
+                ctx.drawImage(imagem, 0, 0, canvas.width, canvas.height);
+            } else {
+                const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+                grad.addColorStop(0, "#ece9e6");
+                grad.addColorStop(1, "#ffffff");
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+
+            const cor = document.getElementById('corTexto').value;
+            const fonte = document.getElementById('fonte').value;
+            const tamanho = document.getElementById('tamanhoFonte').value + "px";
+
+            ctx.fillStyle = cor;
+            ctx.font = tamanho + ' ' + fonte;
+            ctx.textAlign = "center";
+
+            const textos = [
+                document.getElementById('saudacao').value,
+                document.getElementById('vencedor').value,
+                document.getElementById('placar').value,
+                document.getElementById('perdedor').value,
+                document.getElementById('textoExtra').value,
+                document.getElementById('rodape').value
+            ];
+
+            const step = canvas.height / (textos.length + 1);
+            textos.forEach((txt, i) => {
+                ctx.fillText(txt, canvas.width / 2, step * (i + 1));
+            });
         }
 
-        const greeting = document.getElementById('greeting').value;
-        const winner = document.getElementById('winner').value;
-        const score = document.getElementById('score').value;
-        const loser = document.getElementById('loser').value;
-        const message = document.getElementById('message').value;
-        const footer = document.getElementById('footer').value;
-        const textColor = document.getElementById('textColor').value;
-        const fontFamily = document.getElementById('fontFamily').value;
-        const textSize = parseInt(document.getElementById('textSize').value);
-        const scoreColor = document.getElementById('scoreColor').value;
-        const scoreSize = parseInt(document.getElementById('scoreSize').value);
-
-        ctx.textAlign = 'center';
-        ctx.fillStyle = textColor;
-        ctx.font = `${textSize}px ${fontFamily}`;
-
-        ctx.fillText(greeting, canvas.width / 2, 100);
-        ctx.fillText(winner, canvas.width / 2, 200);
-
-        ctx.fillStyle = scoreColor;
-        ctx.font = `${scoreSize}px ${fontFamily}`;
-        ctx.fillText(score, canvas.width / 2, 300);
-
-        ctx.fillStyle = textColor;
-        ctx.font = `${textSize}px ${fontFamily}`;
-        ctx.fillText(loser, canvas.width / 2, 400);
-        ctx.fillText(message, canvas.width / 2, 500);
-        ctx.fillText(footer, canvas.width / 2, canvas.height - 50);
-    }
-
-    function download() {
-        const canvas = document.getElementById('wallpaper');
-        const link = document.createElement('a');
-        link.download = 'wallpaper.png';
-        link.href = canvas.toDataURL();
-        link.click();
-    }
-</script>
+        function baixarImagem() {
+            const link = document.createElement('a');
+            link.download = 'wallpaper.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+    </script>
 
 </body>
 </html>
