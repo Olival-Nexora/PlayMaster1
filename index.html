@@ -1,204 +1,208 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>Gerador de Wallpaper</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #ece9e6, #ffffff);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            margin: 0;
-        }
-
-        h1 {
-            margin-bottom: 20px;
-        }
-
-        #controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin-bottom: 20px;
-            max-width: 800px;
-        }
-
-        .control-group {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            min-width: 150px;
-        }
-
-        label {
-            font-weight: bold;
-        }
-
-        input[type="text"], select, input[type="color"] {
-            padding: 8px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        button {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 10px;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        canvas {
-            border: 1px solid #ccc;
-            margin-top: 20px;
-            max-width: 100%;
-            height: auto;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gerador de Wallpaper</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 1em;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    #controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        max-width: 500px;
+        margin-bottom: 1em;
+    }
+    .control-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 10px;
+    }
+    canvas {
+        border: 1px solid #ccc;
+        width: 100%;
+        max-width: 500px;
+        height: auto;
+    }
+    button {
+        padding: 10px 20px;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+    select, input[type="color"], input[type="range"], input[type="text"] {
+        width: 100%;
+    }
+</style>
 </head>
 <body>
 
-    <h1>Gerador de Wallpaper</h1>
+<h2>Gerador de Wallpaper</h2>
 
-    <div id="controls">
-
-        <div class="control-group">
-            <label>Saudação</label>
-            <input type="text" id="saudacao" maxlength="30">
-        </div>
-
-        <div class="control-group">
-            <label>Time Vencedor</label>
-            <input type="text" id="vencedor" maxlength="30">
-        </div>
-
-        <div class="control-group">
-            <label>Placar</label>
-            <input type="text" id="placar" maxlength="10">
-        </div>
-
-        <div class="control-group">
-            <label>Time Perdedor</label>
-            <input type="text" id="perdedor" maxlength="30">
-        </div>
-
-        <div class="control-group">
-            <label>Texto extra</label>
-            <input type="text" id="textoExtra" maxlength="30">
-        </div>
-
-        <div class="control-group">
-            <label>Rodapé</label>
-            <input type="text" id="rodape" maxlength="50">
-        </div>
-
-        <div class="control-group">
-            <label>Cor das Letras</label>
-            <input type="color" id="corTexto" value="#000000">
-        </div>
-
-        <div class="control-group">
-            <label>Fonte</label>
-            <select id="fonte">
-                <option>Arial</option>
-                <option>Verdana</option>
-                <option>Georgia</option>
-                <option>Courier New</option>
-                <option>Impact</option>
-            </select>
-        </div>
-
-        <div class="control-group">
-            <label>Tamanho da Fonte</label>
-            <select id="tamanhoFonte">
-                <option value="16">Pequeno</option>
-                <option value="24">Médio</option>
-                <option value="36">Grande</option>
-            </select>
-        </div>
-
-        <div class="control-group">
-            <label>Imagem de Fundo</label>
-            <input type="file" id="imagemFundo" accept="image/*">
-        </div>
-
+<div id="controls">
+    <div class="control-group">
+        <label>Imagem de Fundo:</label>
+        <button onclick="setBackground('fundo1.jpg')">Fundo 1</button>
+        <button onclick="setBackground('fundo2.jpg')">Fundo 2</button>
+        <input type="file" id="uploadImage">
     </div>
 
-    <button onclick="gerarWallpaper()">Gerar</button>
-    <button onclick="baixarImagem()">Baixar</button>
+    <div class="control-group">
+        <label>Texto:</label>
+        <select id="textSelector">
+            <option value="saldação">Saldação</option>
+            <option value="vencedor">Time Vencedor</option>
+            <option value="placar">Placar</option>
+            <option value="perdedor">Time Perdedor</option>
+            <option value="livre">Texto Livre</option>
+            <option value="rodapé">Rodapé</option>
+        </select>
+        <input type="text" id="textInput" placeholder="Digite o texto">
+    </div>
 
-    <canvas id="canvas" width="1080" height="1350"></canvas>
+    <div class="control-group">
+        <label>Cor:</label>
+        <input type="color" id="textColor">
+    </div>
 
-    <script>
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        let imagem = null;
+    <div class="control-group">
+        <label>Tamanho:</label>
+        <input type="range" id="textSize" min="20" max="120">
+    </div>
 
-        document.getElementById('imagemFundo').addEventListener('change', function(e) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                imagem = new Image();
-                imagem.onload = gerarWallpaper;
-                imagem.src = event.target.result;
-            }
-            reader.readAsDataURL(e.target.files[0]);
-        });
+    <div class="control-group">
+        <label>Fonte:</label>
+        <select id="textFont">
+            <option>Arial</option>
+            <option>Verdana</option>
+            <option>Courier</option>
+            <option>Georgia</option>
+        </select>
+    </div>
 
-        function gerarWallpaper() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+    <button onclick="generate()">Gerar</button>
+    <button onclick="download()">Baixar</button>
+</div>
 
-            // Fundo
-            if (imagem) {
-                ctx.drawImage(imagem, 0, 0, canvas.width, canvas.height);
-            } else {
-                const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-                grad.addColorStop(0, "#ece9e6");
-                grad.addColorStop(1, "#ffffff");
-                ctx.fillStyle = grad;
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-            }
+<canvas id="wallpaperCanvas" width="1080" height="1350"></canvas>
 
-            const cor = document.getElementById('corTexto').value;
-            const fonte = document.getElementById('fonte').value;
-            const tamanho = document.getElementById('tamanhoFonte').value + "px";
+<script>
+    const canvas = document.getElementById('wallpaperCanvas');
+    const ctx = canvas.getContext('2d');
+    let background = null;
 
-            ctx.fillStyle = cor;
-            ctx.font = tamanho + ' ' + fonte;
-            ctx.textAlign = "center";
+    const texts = {
+        saldação: { text: '', x: 50, y: 100, size: 40, color: '#000000', font: 'Arial' },
+        vencedor: { text: '', x: 50, y: 200, size: 40, color: '#000000', font: 'Arial' },
+        placar: { text: '', x: 50, y: 300, size: 40, color: '#000000', font: 'Arial' },
+        perdedor: { text: '', x: 50, y: 400, size: 40, color: '#000000', font: 'Arial' },
+        livre: { text: '', x: 50, y: 500, size: 40, color: '#000000', font: 'Arial' },
+        rodapé: { text: '', x: 50, y: 1250, size: 30, color: '#000000', font: 'Arial' },
+    };
 
-            const textos = [
-                document.getElementById('saudacao').value,
-                document.getElementById('vencedor').value,
-                document.getElementById('placar').value,
-                document.getElementById('perdedor').value,
-                document.getElementById('textoExtra').value,
-                document.getElementById('rodape').value
-            ];
-
-            const step = canvas.height / (textos.length + 1);
-            textos.forEach((txt, i) => {
-                ctx.fillText(txt, canvas.width / 2, step * (i + 1));
-            });
+    function setBackground(src) {
+        const img = new Image();
+        img.src = src;
+        img.onload = () => {
+            background = img;
+            generate();
         }
+    }
 
-        function baixarImagem() {
-            const link = document.createElement('a');
-            link.download = 'wallpaper.png';
-            link.href = canvas.toDataURL();
-            link.click();
+    document.getElementById('uploadImage').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = () => {
+                background = img;
+                generate();
+            }
         }
-    </script>
+        reader.readAsDataURL(file);
+    });
+
+    function generate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (background) ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+
+        for (let key in texts) {
+            const t = texts[key];
+            ctx.font = `${t.size}px ${t.font}`;
+            ctx.fillStyle = t.color;
+            ctx.fillText(t.text, t.x, t.y);
+        }
+    }
+
+    function download() {
+        const link = document.createElement('a');
+        link.download = 'wallpaper.png';
+        link.href = canvas.toDataURL();
+        link.click();
+    }
+
+    document.getElementById('textInput').addEventListener('input', updateText);
+    document.getElementById('textColor').addEventListener('input', updateText);
+    document.getElementById('textSize').addEventListener('input', updateText);
+    document.getElementById('textFont').addEventListener('input', updateText);
+
+    function updateText() {
+        const selected = document.getElementById('textSelector').value;
+        texts[selected].text = document.getElementById('textInput').value;
+        texts[selected].color = document.getElementById('textColor').value;
+        texts[selected].size = document.getElementById('textSize').value;
+        texts[selected].font = document.getElementById('textFont').value;
+        generate();
+    }
+
+    // Arrastar texto com o mouse ou dedo
+    let dragging = null;
+
+    canvas.addEventListener('mousedown', startDrag);
+    canvas.addEventListener('mousemove', drag);
+    canvas.addEventListener('mouseup', stopDrag);
+    canvas.addEventListener('touchstart', startDrag);
+    canvas.addEventListener('touchmove', drag);
+    canvas.addEventListener('touchend', stopDrag);
+
+    function startDrag(e) {
+        e.preventDefault();
+        const rect = canvas.getBoundingClientRect();
+        const x = (e.clientX || e.touches[0].clientX) - rect.left;
+        const y = (e.clientY || e.touches[0].clientY) - rect.top;
+
+        for (let key in texts) {
+            const t = texts[key];
+            const width = ctx.measureText(t.text).width;
+            if (x > t.x && x < t.x + width && y > t.y - t.size && y < t.y) {
+                dragging = key;
+                break;
+            }
+        }
+    }
+
+    function drag(e) {
+        if (!dragging) return;
+        e.preventDefault();
+        const rect = canvas.getBoundingClientRect();
+        const x = (e.clientX || e.touches[0].clientX) - rect.left;
+        const y = (e.clientY || e.touches[0].clientY) - rect.top;
+        texts[dragging].x = x;
+        texts[dragging].y = y;
+        generate();
+    }
+
+    function stopDrag(e) {
+        dragging = null;
+    }
+</script>
 
 </body>
 </html>
