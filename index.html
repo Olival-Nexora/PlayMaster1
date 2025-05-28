@@ -1,158 +1,190 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gerador de Wallpaper Personalizado</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 20px;
-      background: linear-gradient(135deg, #1e1e1e, #333);
-      color: #fff;
-    }
-    h2 {
-      margin-bottom: 20px;
-    }
-    label {
-      display: block;
-      margin-top: 15px;
-    }
-    input, select {
-      margin-top: 5px;
-      padding: 5px;
-      font-size: 16px;
-      border-radius: 5px;
-      border: none;
-    }
-    canvas {
-      margin-top: 20px;
-      border: 2px solid #fff;
-      border-radius: 10px;
-    }
-    a#downloadLink {
-      display: inline-block;
-      margin-top: 15px;
-      padding: 10px 20px;
-      background: #4caf50;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 5px;
-      transition: background 0.3s;
-    }
-    a#downloadLink:hover {
-      background: #45a049;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Gerador de Wallpaper</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            max-width: 500px;
+            margin-bottom: 20px;
+        }
+        label {
+            display: flex;
+            flex-direction: column;
+            font-size: 14px;
+        }
+        input, select {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            background: #4CAF50;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        canvas {
+            border: 1px solid #ccc;
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
 </head>
 <body>
 
-  <section class="seletor-wallpaper">
-    <h2>Crie seu Wallpaper Personalizado</h2>
+<h1>Gerador de Wallpaper</h1>
 
-    <label for="time">Escolha seu time:</label>
-    <select id="time">
-      <option value="Fla.png">Flamengo</option>
-      <option value="Pal.png">Palmeiras</option>
-      <option value="Cor.png">Corinthians</option>
-      <option value="San.png">Santos</option>
-      <!-- Adicione mais conforme quiser -->
-    </select>
+<div class="controls">
+    <label>Saudação:
+        <input type="text" id="greeting" maxlength="30">
+    </label>
+    <label>Time Vencedor:
+        <input type="text" id="winner" maxlength="30">
+    </label>
+    <label>Placar:
+        <input type="text" id="score" maxlength="10" placeholder="Ex: 2 x 0">
+    </label>
+    <label>Cor do Placar:
+        <input type="color" id="scoreColor" value="#FF0000">
+    </label>
+    <label>Tamanho do Placar:
+        <select id="scoreSize">
+            <option value="30">Pequeno</option>
+            <option value="50" selected>Médio</option>
+            <option value="80">Grande</option>
+        </select>
+    </label>
+    <label>Time Perdedor:
+        <input type="text" id="loser" maxlength="30">
+    </label>
+    <label>Mensagem:
+        <input type="text" id="message" maxlength="30">
+    </label>
+    <label>Rodapé:
+        <input type="text" id="footer" maxlength="50">
+    </label>
+    <label>Cor da Letra:
+        <input type="color" id="textColor" value="#000000">
+    </label>
+    <label>Fonte:
+        <select id="fontFamily">
+            <option value="Arial">Arial</option>
+            <option value="Verdana">Verdana</option>
+            <option value="Georgia">Georgia</option>
+            <option value="Courier New">Courier New</option>
+        </select>
+    </label>
+    <label>Tamanho do Texto:
+        <select id="textSize">
+            <option value="20">Pequeno</option>
+            <option value="30" selected>Médio</option>
+            <option value="50">Grande</option>
+        </select>
+    </label>
+    <label>Imagem de Fundo:
+        <input type="file" id="bgImage" accept="image/*">
+    </label>
+</div>
 
-    <label for="nome">Digite seu nome:</label>
-    <input type="text" id="nome" placeholder="Seu nome">
+<div>
+    <button onclick="generate()">Gerar</button>
+    <button onclick="download()">Baixar</button>
+</div>
 
-    <label for="corTexto">Escolha a cor do texto:</label>
-    <input type="color" id="corTexto" value="#ffffff">
+<br>
+<canvas id="wallpaper" width="1080" height="1350"></canvas>
 
-    <label for="fonteTexto">Escolha a fonte:</label>
-    <select id="fonteTexto">
-      <option value="Arial">Arial</option>
-      <option value="Impact">Impact</option>
-      <option value="Comic Sans MS">Comic Sans</option>
-      <option value="Courier New">Courier</option>
-    </select>
+<script>
+    let backgroundImage = null;
 
-    <label for="posicaoTexto">Posição do nome:</label>
-    <select id="posicaoTexto">
-      <option value="top">Superior</option>
-      <option value="middle">Central</option>
-      <option value="bottom" selected>Inferior</option>
-    </select>
-
-    <label for="opacidade">Opacidade do escudo:</label>
-    <input type="range" id="opacidade" min="0.1" max="1" step="0.1" value="1">
-
-    <canvas id="canvas" width="1080" height="1920"></canvas>
-
-    <a id="downloadLink" download="wallpaper.png">Baixar Wallpaper</a>
-  </section>
-
-  <script>
-    const time = document.getElementById('time');
-    const nome = document.getElementById('nome');
-    const corTexto = document.getElementById('corTexto');
-    const fonteTexto = document.getElementById('fonteTexto');
-    const posicaoTexto = document.getElementById('posicaoTexto');
-    const opacidade = document.getElementById('opacidade');
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    const link = document.getElementById('downloadLink');
-
-    function atualizarWallpaper() {
-      const img = new Image();
-      img.crossOrigin = "anonymous"; // Caso use imagens de servidores externos
-      img.src = time.value;
-
-      img.onload = function() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Ajusta opacidade do escudo
-        ctx.globalAlpha = parseFloat(opacidade.value);
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        ctx.globalAlpha = 1;
-
-        const texto = nome.value.trim() || "Seu Nome Aqui";
-        const cor = corTexto.value;
-        const fonte = fonteTexto.value;
-        const posicao = posicaoTexto.value;
-
-        let y;
-        if (posicao === "top") y = 150;
-        else if (posicao === "middle") y = canvas.height / 2;
-        else y = canvas.height - 150;
-
-        ctx.font = `bold 60px ${fonte}`;
-        ctx.fillStyle = cor;
-        ctx.strokeStyle = "#000";
-        ctx.lineWidth = 4;
-        ctx.textAlign = "center";
-
-        // Sombra no texto
-        ctx.shadowColor = "rgba(0,0,0,0.5)";
-        ctx.shadowBlur = 10;
-        ctx.shadowOffsetX = 4;
-        ctx.shadowOffsetY = 4;
-
-        ctx.strokeText(texto, canvas.width / 2, y);
-        ctx.fillText(texto, canvas.width / 2, y);
-
-        ctx.shadowColor = "transparent"; // limpa sombra
-
-        // Atualiza link de download
-        link.href = canvas.toDataURL();
-      }
-    }
-
-    // Atualiza ao mudar qualquer configuração
-    [time, nome, corTexto, fonteTexto, posicaoTexto, opacidade].forEach(el => {
-      el.addEventListener('input', atualizarWallpaper);
+    document.getElementById('bgImage').addEventListener('change', function(e) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const img = new Image();
+            img.onload = function() {
+                backgroundImage = img;
+                generate();
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(e.target.files[0]);
     });
 
-    // Gera inicialmente
-    atualizarWallpaper();
-  </script>
+    function generate() {
+        const canvas = document.getElementById('wallpaper');
+        const ctx = canvas.getContext('2d');
+
+        // Limpar
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Fundo
+        if (backgroundImage) {
+            ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+        } else {
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        const greeting = document.getElementById('greeting').value;
+        const winner = document.getElementById('winner').value;
+        const score = document.getElementById('score').value;
+        const loser = document.getElementById('loser').value;
+        const message = document.getElementById('message').value;
+        const footer = document.getElementById('footer').value;
+        const textColor = document.getElementById('textColor').value;
+        const fontFamily = document.getElementById('fontFamily').value;
+        const textSize = parseInt(document.getElementById('textSize').value);
+        const scoreColor = document.getElementById('scoreColor').value;
+        const scoreSize = parseInt(document.getElementById('scoreSize').value);
+
+        ctx.textAlign = 'center';
+        ctx.fillStyle = textColor;
+        ctx.font = `${textSize}px ${fontFamily}`;
+
+        ctx.fillText(greeting, canvas.width / 2, 100);
+        ctx.fillText(winner, canvas.width / 2, 200);
+
+        ctx.fillStyle = scoreColor;
+        ctx.font = `${scoreSize}px ${fontFamily}`;
+        ctx.fillText(score, canvas.width / 2, 300);
+
+        ctx.fillStyle = textColor;
+        ctx.font = `${textSize}px ${fontFamily}`;
+        ctx.fillText(loser, canvas.width / 2, 400);
+        ctx.fillText(message, canvas.width / 2, 500);
+        ctx.fillText(footer, canvas.width / 2, canvas.height - 50);
+    }
+
+    function download() {
+        const canvas = document.getElementById('wallpaper');
+        const link = document.createElement('a');
+        link.download = 'wallpaper.png';
+        link.href = canvas.toDataURL();
+        link.click();
+    }
+</script>
 
 </body>
 </html>
