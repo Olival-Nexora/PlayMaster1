@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Crie seu Wallpaper - StreamDroid</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Oswald:wght@500&family=Ubuntu&display=swap" rel="stylesheet">
   <style>
@@ -93,24 +93,19 @@
     <div class="left-panel">
       <h2>Escolha um Time</h2>
       <select id="teamImage">
-        <option value="flamengo.jpg">Flamengo</option>
-        <option value="palmeiras.jpg">Palmeiras</option>
-        <option value="sport.jpg">Sport</option>
-        <!-- Adicione mais conforme necessário -->
+        <!-- opções de times -->
       </select>
 
       <h2>Ou escolha um fundo</h2>
       <select id="backgroundImage">
-        <option value="fundo1.jpg">Fundo 1</option>
-        <option value="fundo2.jpg">Fundo 2</option>
-        <option value="fundo3.jpg">Fundo 3</option>
+        <!-- opções de fundos -->
       </select>
 
       <h2>Texto no Wallpaper</h2>
-      <input type="text" id="customText" placeholder="Ex: Vamos Vasco!" />
+      <input type="text" id="customText" placeholder="Ex: Vamos Vasco!">
 
       <h2>Cor do Texto</h2>
-      <input type="color" id="textColor" value="#ffffff" />
+      <input type="color" id="textColor" value="#ffffff">
 
       <label for="fontFamily">Escolha uma Fonte:</label>
       <select id="fontFamily">
@@ -120,7 +115,7 @@
       </select>
 
       <label for="textSize">Tamanho do Texto:</label>
-      <input type="range" id="textSize" min="20" max="80" value="40" />
+      <input type="range" id="textSize" min="20" max="80" value="40">
 
       <button onclick="generateWallpaper()">Gerar Wallpaper</button>
       <button onclick="downloadWallpaper()">Baixar Imagem</button>
@@ -148,42 +143,30 @@
     const fontFamily = document.getElementById('fontFamily');
     const textSize = document.getElementById('textSize');
 
-    let drag = false;
+    let currentImage = new Image();
+    let dragging = false;
     let offsetX = 0, offsetY = 0;
-    let textX = canvas.width / 2, textY = canvas.height * 0.85;
+    let textX = canvas.width / 2;
+    let textY = canvas.height * 0.8;
+
+    window.onload = generateWallpaper;
 
     function generateWallpaper() {
-      const bgImage = new Image();
-      const teamLogo = new Image();
-
-      const bgSrc = backgroundSelect.value;
-      const logoSrc = teamSelect.value;
-
-      bgImage.src = bgSrc;
-      teamLogo.src = logoSrc;
-
-      bgImage.onload = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
-
-        teamLogo.onload = () => {
-          const logoSize = canvas.width * 0.3;
-          const logoX = (canvas.width - logoSize) / 2;
-          const logoY = canvas.height * 0.2;
-
-          ctx.drawImage(teamLogo, logoX, logoY, logoSize, logoSize);
-
-          drawText();
-        };
-      };
-    }
-
-    function drawText() {
       const text = customText.value || "Seu Time";
       const color = textColor.value;
       const font = fontFamily.value;
       const size = parseInt(textSize.value);
+      const imgSrc = backgroundSelect.value || teamSelect.value;
 
+      currentImage.src = imgSrc;
+      currentImage.onload = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(currentImage, 0, 0, canvas.width, canvas.height);
+        drawText(text, color, font, size);
+      };
+    }
+
+    function drawText(text, color, font, size) {
       ctx.font = `${size}px ${font}`;
       ctx.fillStyle = color;
       ctx.textAlign = 'center';
@@ -192,27 +175,26 @@
       ctx.fillText(text, textX, textY);
     }
 
-    // Drag and Drop do texto
     canvas.addEventListener('mousedown', (e) => {
       const rect = canvas.getBoundingClientRect();
       const mouseX = e.clientX - rect.left;
       const mouseY = e.clientY - rect.top;
+      const textWidth = ctx.measureText(customText.value).width;
 
-      const textWidth = ctx.measureText(customText.value || "Seu Time").width;
       if (
         mouseX > textX - textWidth / 2 &&
         mouseX < textX + textWidth / 2 &&
         mouseY > textY - 20 &&
         mouseY < textY + 10
       ) {
-        drag = true;
+        dragging = true;
         offsetX = mouseX - textX;
         offsetY = mouseY - textY;
       }
     });
 
     canvas.addEventListener('mousemove', (e) => {
-      if (drag) {
+      if (dragging) {
         const rect = canvas.getBoundingClientRect();
         textX = e.clientX - rect.left - offsetX;
         textY = e.clientY - rect.top - offsetY;
@@ -220,9 +202,7 @@
       }
     });
 
-    window.addEventListener('mouseup', () => {
-      drag = false;
-    });
+    window.addEventListener('mouseup', () => dragging = false);
 
     function downloadWallpaper() {
       const link = document.createElement('a');
@@ -231,12 +211,9 @@
       link.click();
     }
 
-    // Eventos
-    [teamSelect, backgroundSelect, customText, textColor, fontFamily, textSize].forEach(el =>
-      el.addEventListener('input', generateWallpaper)
-    );
-
-    window.onload = generateWallpaper;
+    [teamSelect, backgroundSelect, customText, textColor, fontFamily, textSize]
+      .forEach(el => el.addEventListener('input', generateWallpaper));
   </script>
+
 </body>
 </html>
