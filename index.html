@@ -9,7 +9,7 @@
     body {
       margin: 0;
       font-family: 'Roboto', sans-serif;
-      background-color: #0e0e0e; 
+      background-color: #0e0e0e;
       color: #fff;
       padding: 20px;
       text-align: center;
@@ -90,30 +90,13 @@
   <h1>Crie seu Wallpaper Personalizado</h1>
 
   <div class="container">
-    <!-- Painel de Configuração -->
     <div class="left-panel">
       <h2>Escolha um Time</h2>
       <select id="teamImage">
         <option value="flamengo.jpg">Flamengo</option>
         <option value="palmeiras.jpg">Palmeiras</option>
         <option value="sport.jpg">Sport</option>
-        <option value="juventude.jpg">Juventude</option>
-        <option value="gremio.jpg">Grêmio</option>
-        <option value="internacional.jpg">Internacional</option>
-        <option value="vasco.jpg">Vasco da Gama</option>
-        <option value="fluminense.jpg">Fluminense</option>
-        <option value="botafogo.jpg">Botafogo</option>
-        <option value="santos.jpg">Santos</option>
-        <option value="corinthians.jpg">Corinthians</option>
-        <option value="saopaulo.jpg">São Paulo</option>
-        <option value="cruzeiro.jpg">Cruzeiro</option>
-        <option value="bahia.jpg">Bahia</option>
-        <option value="vitoria.jpg">Vitória</option>
-        <option value="ceara.jpg">Ceará</option>
-        <option value="fortaleza.jpg">Fortaleza</option>
-        <option value="mirassol.jpg">Mirassol</option>
-        <option value="atletico.jpg">Atlético Mineiro</option>
-        <option value="bragantino.jpg">Bragantino</option>
+        <!-- Adicione mais conforme necessário -->
       </select>
 
       <h2>Ou escolha um fundo</h2>
@@ -121,8 +104,6 @@
         <option value="fundo1.jpg">Fundo 1</option>
         <option value="fundo2.jpg">Fundo 2</option>
         <option value="fundo3.jpg">Fundo 3</option>
-        <option value="fundo4.jpg">Fundo 4</option>
-        <option value="fundo5.jpg">Fundo 5</option>
       </select>
 
       <h2>Texto no Wallpaper</h2>
@@ -145,7 +126,6 @@
       <button onclick="downloadWallpaper()">Baixar Imagem</button>
     </div>
 
-    <!-- Preview do Wallpaper -->
     <div class="right-panel">
       <h2>Visualização</h2>
       <canvas id="previewCanvas" width="1080" height="1350"></canvas>
@@ -168,36 +148,42 @@
     const fontFamily = document.getElementById('fontFamily');
     const textSize = document.getElementById('textSize');
 
-    let currentImage = new Image();
-    currentImage.src = 'default.jpg';
-
     let drag = false;
     let offsetX = 0, offsetY = 0;
-    let textX = canvas.width / 2, textY = canvas.height * 0.8;
-
-    // Carregar imagem inicial
-    window.onload = () => {
-      generateWallpaper();
-    };
+    let textX = canvas.width / 2, textY = canvas.height * 0.85;
 
     function generateWallpaper() {
+      const bgImage = new Image();
+      const teamLogo = new Image();
+
+      const bgSrc = backgroundSelect.value;
+      const logoSrc = teamSelect.value;
+
+      bgImage.src = bgSrc;
+      teamLogo.src = logoSrc;
+
+      bgImage.onload = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
+
+        teamLogo.onload = () => {
+          const logoSize = canvas.width * 0.3;
+          const logoX = (canvas.width - logoSize) / 2;
+          const logoY = canvas.height * 0.2;
+
+          ctx.drawImage(teamLogo, logoX, logoY, logoSize, logoSize);
+
+          drawText();
+        };
+      };
+    }
+
+    function drawText() {
       const text = customText.value || "Seu Time";
       const color = textColor.value;
       const font = fontFamily.value;
       const size = parseInt(textSize.value);
 
-      const imgSrc = backgroundSelect.value ? backgroundSelect.value : teamSelect.value;
-      currentImage.src = imgSrc;
-
-      currentImage.onload = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(currentImage, 0, 0, canvas.width, canvas.height);
-
-        drawText(text, color, font, size);
-      };
-    }
-
-    function drawText(text, color, font, size) {
       ctx.font = `${size}px ${font}`;
       ctx.fillStyle = color;
       ctx.textAlign = 'center';
@@ -206,13 +192,13 @@
       ctx.fillText(text, textX, textY);
     }
 
-    // Arrastar texto
+    // Drag and Drop do texto
     canvas.addEventListener('mousedown', (e) => {
       const rect = canvas.getBoundingClientRect();
       const mouseX = e.clientX - rect.left;
       const mouseY = e.clientY - rect.top;
 
-      const textWidth = ctx.measureText(customText.value).width;
+      const textWidth = ctx.measureText(customText.value || "Seu Time").width;
       if (
         mouseX > textX - textWidth / 2 &&
         mouseX < textX + textWidth / 2 &&
@@ -245,14 +231,12 @@
       link.click();
     }
 
-    // Eventos de atualização
-    teamSelect.addEventListener('change', generateWallpaper);
-    backgroundSelect.addEventListener('change', generateWallpaper);
-    customText.addEventListener('input', generateWallpaper);
-    textColor.addEventListener('input', generateWallpaper);
-    fontFamily.addEventListener('change', generateWallpaper);
-    textSize.addEventListener('input', generateWallpaper);
-  </script>
+    // Eventos
+    [teamSelect, backgroundSelect, customText, textColor, fontFamily, textSize].forEach(el =>
+      el.addEventListener('input', generateWallpaper)
+    );
 
+    window.onload = generateWallpaper;
+  </script>
 </body>
 </html>
