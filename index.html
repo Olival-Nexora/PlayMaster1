@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<A!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -9,7 +9,7 @@
     body {
       margin: 0;
       font-family: 'Roboto', sans-serif;
-      background-color: #0e0e0e;
+      background-color: #0e0e0e; 
       color: #fff;
       padding: 20px;
       text-align: center;
@@ -164,8 +164,6 @@
     let posX = canvas.width / 2;
     let posY = canvas.height * 0.8;
     let isDragging = false;
-    let imgFundo = new Image();
-    imgFundo.src = 'default.jpg';
 
     function updatePreview() {
       textoUsuario = document.getElementById("customText").value || "";
@@ -181,18 +179,19 @@
         return;
       }
 
-      let selectedImage = vencedor || perdedor;
+      let selectedImage = vencedor || perdedor || "default.jpg";
 
-      if (!selectedImage) {
-        imgFundo.src = 'default.jpg';
-      } else {
-        imgFundo.src = selectedImage;
-      }
+      const img = new Image();
+      img.src = selectedImage;
 
-      imgFundo.onload = () => {
+      img.onload = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(imgFundo, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         desenharTexto();
+      };
+
+      img.onerror = () => {
+        alert("Erro ao carregar a imagem: " + selectedImage + "\nVerifique se o arquivo existe na mesma pasta do index.html e se o nome está correto.");
       };
     }
 
@@ -216,12 +215,12 @@
       const textWidth = metrics.width;
       const textHeight = tamanhoTexto;
 
-      if (
-        x > posX - textWidth / 2 &&
-        x < posX + textWidth / 2 &&
-        y > posY - textHeight / 2 &&
-        y < posY + textHeight / 2
-      ) {
+      const minX = posX - textWidth / 2;
+      const maxX = posX + textWidth / 2;
+      const minY = posY - textHeight / 2;
+      const maxY = posY + textHeight / 2;
+
+      if (x >= minX && x <= maxX && y >= minY && y <= maxY) {
         isDragging = true;
       }
     });
@@ -233,7 +232,7 @@
       posX = e.clientX - rect.left;
       posY = e.clientY - rect.top;
 
-      updatePreview(); // Atualiza posição do texto
+      updatePreview(); // Atualiza a posição do texto
     });
 
     window.addEventListener("mouseup", () => {
@@ -251,7 +250,7 @@
       link.click();
     }
 
-    // Eventos para atualizar automaticamente
+    // Eventos automáticos
     document.getElementById("vencedor").addEventListener("change", updatePreview);
     document.getElementById("perdedor").addEventListener("change", updatePreview);
     document.getElementById("customText").addEventListener("input", updatePreview);
