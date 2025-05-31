@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -142,9 +142,6 @@
     const canvas = document.getElementById('previewCanvas');
     const ctx = canvas.getContext('2d');
 
-    const imgFundo = new Image();
-    imgFundo.src = 'default.jpg'; // Imagem padrão
-
     function generateWallpaper() {
       const vencedor = document.getElementById("vencedor").value;
       const perdedor = document.getElementById("perdedor").value;
@@ -152,19 +149,13 @@
       const color = document.getElementById("textColor").value;
       const size = parseInt(document.getElementById("textSize").value);
 
-      let imageName = vencedor || perdedor;
+      const imageName = vencedor || perdedor || 'default.jpg';
+      const img = new Image();
+      img.src = `./${imageName}`;
 
-      if (!imageName) {
-        imgFundo.src = 'default.jpg';
-      } else {
-        imgFundo.src = `./${imageName}`;
-      }
-
-      imgFundo.onload = () => {
-        ctx.fillStyle = "#000";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        ctx.drawImage(imgFundo, 0, 0, canvas.width, canvas.height);
+      img.onload = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
         ctx.fillStyle = color;
         ctx.font = `${size}px Arial`;
@@ -174,6 +165,10 @@
 
         const y = canvas.height * 0.8;
         ctx.fillText(text, canvas.width / 2, y);
+      };
+
+      img.onerror = () => {
+        alert(`Erro ao carregar a imagem: ${imageName}`);
       };
     }
 
