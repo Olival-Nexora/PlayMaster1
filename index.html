@@ -1,208 +1,196 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gerador de Wallpaper</title>
-<style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StreamDroid - Programação Esportiva</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
     body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 1em;
-        display: flex;
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: #0e0e0e; 
+      color: #fff;
+    }
+    header {
+      background: linear-gradient(to right, #000000, #1a1a1a);
+      padding: 60px 20px;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    header p {
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto 30px;
+    }
+    .btn-whatsapp {
+      display: inline-block;
+      background-color: #25d366;
+      color: white;
+      padding: 15px 25px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .btn-whatsapp:hover {
+      background-color: #1ebf54;
+    }
+
+    section {
+      padding: 60px 20px;
+      text-align: center;
+    }
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .feature-box {
+      background: #1c1c1c;
+      padding: 20px;
+      border-radius: 10px;
+      width: 280px;
+    }
+    .testimonials {
+      background-color: #141414;
+    }
+    .testimonial {
+      max-width: 600px;
+      margin: 20px auto;
+      font-style: italic;
+    }
+    .testimonial-author {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    .pricing {
+      background-color: #1c1c1c;
+    }
+    .plan {
+      background: #2a2a2a;
+      padding: 20px;
+      border-radius: 10px;
+      width: 280px;
+      margin: 10px;
+    }
+    .plans-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    footer {
+      background: #111;
+      text-align: center;
+      padding: 30px 20px;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+    @media (max-width: 768px) {
+      .features, .plans-container {
         flex-direction: column;
         align-items: center;
+      }
     }
-    #controls {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        max-width: 500px;
-        margin-bottom: 1em;
-    }
-    .control-group {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 10px;
-    }
-    canvas {
-        border: 1px solid #ccc;
-        width: 100%;
-        max-width: 500px;
-        height: auto;
-    }
-    button {
-        padding: 10px 20px;
-        margin-top: 10px;
-        cursor: pointer;
-    }
-    select, input[type="color"], input[type="range"], input[type="text"] {
-        width: 100%;
-    }
-</style>
+  </style>
 </head>
 <body>
 
-<h2>Gerador de Wallpaper</h2>
+  <!-- Header -->
+  <header>
+    <h1>StreamDroid</h1>
+    <p>Acesso completo à programação esportiva online. Canais ao vivo, jogos exclusivos e conteúdo sob demanda.</p>
+    <a href="https://wa.me/5521999999999"  target="_blank" class="btn-whatsapp">Teste Grátis por 2 Horas →</a>
+  </header>
 
-<div id="controls">
-    <div class="control-group">
-        <label>Imagem de Fundo:</label>
-        <button onclick="setBackground('fundo1.jpg')">Fundo 1</button>
-        <button onclick="setBackground('fundo2.jpg')">Fundo 2</button>
-        <input type="file" id="uploadImage">
+  <!-- Sobre -->
+  <section>
+    <h2>O que é StreamDroid?</h2>
+    <p>StreamDroid é uma plataforma digital de streaming esportivo que oferece acesso ilimitado a jogos, canais ao vivo e conteúdos exclusivos. Com interface intuitiva e compatibilidade em vários dispositivos, você assiste onde quiser, no seu tempo.</p>
+  </section>
+
+  <!-- Recursos -->
+  <section>
+    <h2>Vantagens do StreamDroid</h2>
+    <div class="features">
+      <div class="feature-box">
+        <h3>Canais ao Vivo</h3>
+        <p>Acesse os principais canais esportivos do Brasil e do mundo diretamente do seu dispositivo.</p>
+      </div>
+      <div class="feature-box">
+        <h3>Conteúdo Sob Demanda</h3>
+        <p>Assista aos melhores jogos e programas quando quiser, sem horários fixos.</p>
+      </div>
+      <div class="feature-box">
+        <h3>Compatível com Todos os Dispositivos</h3>
+        <p>Funciona no celular, tablet, smart TV e computador. Basta ter internet!</p>
+      </div>
     </div>
+  </section>
 
-    <div class="control-group">
-        <label>Texto:</label>
-        <select id="textSelector">
-            <option value="saldação">Saldação</option>
-            <option value="vencedor">Time Vencedor</option>
-            <option value="placar">Placar</option>
-            <option value="perdedor">Time Perdedor</option>
-            <option value="livre">Texto Livre</option>
-            <option value="rodapé">Rodapé</option>
-        </select>
-        <input type="text" id="textInput" placeholder="Digite o texto">
+  <!-- Depoimentos -->
+  <section class="testimonials">
+    <h2>O que nossos usuários dizem</h2>
+    <div class="testimonial">
+      "Finalmente achei um app rápido e estável. Assisti todos os jogos do meu time nesse fim de semana!"
+      <div class="testimonial-author">— João Silva</div>
     </div>
-
-    <div class="control-group">
-        <label>Cor:</label>
-        <input type="color" id="textColor">
+    <div class="testimonial">
+      "Super fácil de usar. Valeu muito a pena o teste gratuito antes de assinar."
+      <div class="testimonial-author">— Ana Beatriz</div>
     </div>
-
-    <div class="control-group">
-        <label>Tamanho:</label>
-        <input type="range" id="textSize" min="20" max="120">
+    <div class="testimonial">
+      "Já experimentei várias plataformas, mas essa é a mais completa que encontrei até hoje."
+      <div class="testimonial-author">— Lucas Ferreira</div>
     </div>
+  </section>
 
-    <div class="control-group">
-        <label>Fonte:</label>
-        <select id="textFont">
-            <option>Arial</option>
-            <option>Verdana</option>
-            <option>Courier</option>
-            <option>Georgia</option>
-        </select>
+  <!-- Planos -->
+  <section class="pricing">
+    <h2>Nossos Planos</h2>
+    <div class="plans-container">
+      <div class="plan">
+        <h3>Teste Grátis</h3>
+        <p>2 horas de acesso completo</p>
+        <ul style="text-align:left; list-style:none; padding-left:0;">
+          <li>✔ Canais ao vivo</li>
+          <li>✔ Conteúdo sob demanda</li>
+          <li>✔ Suporte via WhatsApp</li>
+        </ul>
+        <a href="https://wa.me/5521999999999"  target="_blank" class="btn-whatsapp" style="display:block; text-align:center; margin-top:10px;">Começar Agora</a>
+      </div>
+      <div class="plan">
+        <h3>Mensal</h3>
+        <p>R$ 29,90 / mês</p>
+        <ul style="text-align:left; list-style:none; padding-left:0;">
+          <li>✔ Acesso ilimitado</li>
+          <li>✔ Novos canais toda semana</li>
+          <li>✔ Sem anúncios</li>
+        </ul>
+        <a href="https://wa.me/5521999999999"  target="_blank" class="btn-whatsapp" style="display:block; text-align:center; margin-top:10px;">Assinar</a>
+      </div>
     </div>
+  </section>
 
-    <button onclick="generate()">Gerar</button>
-    <button onclick="download()">Baixar</button>
-</div>
+  <!-- Criação de Wallpaper -->
+  <section>
+    <h2>Crie seu Wallpaper Personalizado</h2>
+    <p>Crie fundos com os mascotes dos seus times favoritos e deixe seu celular do seu jeito!</p>
+    <a href="wallpaper.html" class="btn-whatsapp">Criar Agora</a>
+  </section>
 
-<canvas id="wallpaperCanvas" width="1080" height="1350"></canvas>
-
-<script>
-    const canvas = document.getElementById('wallpaperCanvas');
-    const ctx = canvas.getContext('2d');
-    let background = null;
-
-    const texts = {
-        saldação: { text: '', x: 50, y: 100, size: 40, color: '#000000', font: 'Arial' },
-        vencedor: { text: '', x: 50, y: 200, size: 40, color: '#000000', font: 'Arial' },
-        placar: { text: '', x: 50, y: 300, size: 40, color: '#000000', font: 'Arial' },
-        perdedor: { text: '', x: 50, y: 400, size: 40, color: '#000000', font: 'Arial' },
-        livre: { text: '', x: 50, y: 500, size: 40, color: '#000000', font: 'Arial' },
-        rodapé: { text: '', x: 50, y: 1250, size: 30, color: '#000000', font: 'Arial' },
-    };
-
-    function setBackground(src) {
-        const img = new Image();
-        img.src = src;
-        img.onload = () => {
-            background = img;
-            generate();
-        }
-    }
-
-    document.getElementById('uploadImage').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            const img = new Image();
-            img.src = event.target.result;
-            img.onload = () => {
-                background = img;
-                generate();
-            }
-        }
-        reader.readAsDataURL(file);
-    });
-
-    function generate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        if (background) ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-
-        for (let key in texts) {
-            const t = texts[key];
-            ctx.font = `${t.size}px ${t.font}`;
-            ctx.fillStyle = t.color;
-            ctx.fillText(t.text, t.x, t.y);
-        }
-    }
-
-    function download() {
-        const link = document.createElement('a');
-        link.download = 'wallpaper.png';
-        link.href = canvas.toDataURL();
-        link.click();
-    }
-
-    document.getElementById('textInput').addEventListener('input', updateText);
-    document.getElementById('textColor').addEventListener('input', updateText);
-    document.getElementById('textSize').addEventListener('input', updateText);
-    document.getElementById('textFont').addEventListener('input', updateText);
-
-    function updateText() {
-        const selected = document.getElementById('textSelector').value;
-        texts[selected].text = document.getElementById('textInput').value;
-        texts[selected].color = document.getElementById('textColor').value;
-        texts[selected].size = document.getElementById('textSize').value;
-        texts[selected].font = document.getElementById('textFont').value;
-        generate();
-    }
-
-    // Arrastar texto com o mouse ou dedo
-    let dragging = null;
-
-    canvas.addEventListener('mousedown', startDrag);
-    canvas.addEventListener('mousemove', drag);
-    canvas.addEventListener('mouseup', stopDrag);
-    canvas.addEventListener('touchstart', startDrag);
-    canvas.addEventListener('touchmove', drag);
-    canvas.addEventListener('touchend', stopDrag);
-
-    function startDrag(e) {
-        e.preventDefault();
-        const rect = canvas.getBoundingClientRect();
-        const x = (e.clientX || e.touches[0].clientX) - rect.left;
-        const y = (e.clientY || e.touches[0].clientY) - rect.top;
-
-        for (let key in texts) {
-            const t = texts[key];
-            const width = ctx.measureText(t.text).width;
-            if (x > t.x && x < t.x + width && y > t.y - t.size && y < t.y) {
-                dragging = key;
-                break;
-            }
-        }
-    }
-
-    function drag(e) {
-        if (!dragging) return;
-        e.preventDefault();
-        const rect = canvas.getBoundingClientRect();
-        const x = (e.clientX || e.touches[0].clientX) - rect.left;
-        const y = (e.clientY || e.touches[0].clientY) - rect.top;
-        texts[dragging].x = x;
-        texts[dragging].y = y;
-        generate();
-    }
-
-    function stopDrag(e) {
-        dragging = null;
-    }
-</script>
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 StreamDroid. Todos os direitos reservados.</p>
+    <p>Desenvolvido com ❤️ | Teste Grátis: <a href="https://wa.me/5521999999999"  target="_blank">Clique aqui</a></p>
+  </footer>
 
 </body>
 </html>
