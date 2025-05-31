@@ -14,12 +14,7 @@
       padding: 20px;
       text-align: center;
     }
-
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 20px;
-    }
-
+    h1 { font-size: 2rem; margin-bottom: 20px; }
     .container {
       max-width: 900px;
       margin: auto;
@@ -29,7 +24,6 @@
       justify-content: center;
       align-items: flex-start;
     }
-
     .left-panel, .right-panel {
       background: #1c1c1c;
       padding: 20px;
@@ -37,7 +31,6 @@
       width: 100%;
       max-width: 400px;
     }
-
     select, input[type="text"], input[type="color"], input[type="range"] {
       width: 100%;
       padding: 10px;
@@ -46,7 +39,6 @@
       border: none;
       font-size: 1rem;
     }
-
     canvas {
       width: 100%;
       max-width: 400px;
@@ -54,7 +46,6 @@
       border-radius: 10px;
       margin-top: 20px;
     }
-
     button {
       background-color: #25d366;
       color: white;
@@ -66,11 +57,9 @@
       margin-top: 15px;
       transition: background 0.3s;
     }
-
     button:hover {
       background-color: #1ebf54;
     }
-
     footer {
       margin-top: 50px;
       font-size: 0.9rem;
@@ -86,10 +75,14 @@
     <!-- Painel de Configuração -->
     <div class="left-panel">
       <h2>Time Vencedor</h2>
-      <select id="vencedor"></select>
+      <select id="vencedor">
+        <option value="">-- Selecione --</option>
+      </select>
 
       <h2>Time Perdedor</h2>
-      <select id="perdedor"></select>
+      <select id="perdedor">
+        <option value="">-- Selecione --</option>
+      </select>
 
       <h2>Escreva seu Texto (50 carac.)</h2>
       <input type="text" id="customText" maxlength="50" placeholder="Ex: GOL DO FLAMENGO!" />
@@ -124,16 +117,15 @@
       "Fortaleza", "Ceará", "Atlético Mineiro", "Cruzeiro"
     ];
 
-    // Preencher selects
     function carregarTimes() {
-      const selectVencedor = document.getElementById("vencedor");
-      const selectPerdedor = document.getElementById("perdedor");
+      const selectV = document.getElementById("vencedor");
+      const selectP = document.getElementById("perdedor");
 
       times.forEach(time => {
-        const optionV = new Option(time, time.toLowerCase() + "V.jpg");
-        const optionP = new Option(time, time.toLowerCase() + "P.jpg");
-        selectVencedor.appendChild(optionV);
-        selectPerdedor.appendChild(optionP);
+        const optV = new Option(time, time.toLowerCase() + "V.jpg");
+        const optP = new Option(time, time.toLowerCase() + "P.jpg");
+        selectV.appendChild(optV);
+        selectP.appendChild(optP);
       });
     }
 
@@ -149,9 +141,23 @@
       const color = document.getElementById("textColor").value;
       const size = parseInt(document.getElementById("textSize").value);
 
-      const imageName = vencedor || perdedor || 'default.jpg';
+      let selectedImage = "";
+
+      if (vencedor && perdedor) {
+        alert("Selecione apenas Vencedor ou Perdedor, não ambos.");
+        return;
+      }
+
+      if (vencedor) {
+        selectedImage = vencedor;
+      } else if (perdedor) {
+        selectedImage = perdedor;
+      } else {
+        selectedImage = "default.jpg";
+      }
+
       const img = new Image();
-      img.src = `./${imageName}`;
+      img.src = selectedImage;
 
       img.onload = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -163,12 +169,11 @@
         ctx.shadowColor = "#000";
         ctx.shadowBlur = 10;
 
-        const y = canvas.height * 0.8;
-        ctx.fillText(text, canvas.width / 2, y);
+        ctx.fillText(text, canvas.width / 2, canvas.height * 0.8);
       };
 
       img.onerror = () => {
-        alert(`Erro ao carregar a imagem: ${imageName}`);
+        alert("Erro ao carregar a imagem: " + selectedImage + "\nVerifique se o arquivo existe na mesma pasta do index.html e se o nome está correto.");
       };
     }
 
@@ -178,13 +183,6 @@
       link.href = canvas.toDataURL('image/png');
       link.click();
     }
-
-    // Eventos
-    document.getElementById("vencedor").addEventListener("change", generateWallpaper);
-    document.getElementById("perdedor").addEventListener("change", generateWallpaper);
-    document.getElementById("customText").addEventListener("input", generateWallpaper);
-    document.getElementById("textColor").addEventListener("input", generateWallpaper);
-    document.getElementById("textSize").addEventListener("input", generateWallpaper);
   </script>
 
 </body>
