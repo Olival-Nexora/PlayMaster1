@@ -9,12 +9,17 @@
     body {
       margin: 0;
       font-family: 'Roboto', sans-serif;
-      background-color: #0e0e0e;       
+      background-color: #0e0e0e; 
       color: #fff;
       padding: 20px;
       text-align: center;
     }
-    h1 { font-size: 2rem; margin-bottom: 20px; }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
     .container {
       max-width: 900px;
       margin: auto;
@@ -24,6 +29,7 @@
       justify-content: center;
       align-items: flex-start;
     }
+
     .left-panel, .right-panel {
       background: #1c1c1c;
       padding: 20px;
@@ -31,6 +37,7 @@
       width: 100%;
       max-width: 400px;
     }
+
     select, input[type="text"], input[type="color"], input[type="range"] {
       width: 100%;
       padding: 10px;
@@ -39,13 +46,16 @@
       border: none;
       font-size: 1rem;
     }
+
     canvas {
       width: 100%;
       max-width: 400px;
       height: auto;
       border-radius: 10px;
       margin-top: 20px;
+      cursor: grab;
     }
+
     button {
       background-color: #25d366;
       color: white;
@@ -57,9 +67,11 @@
       margin-top: 15px;
       transition: background 0.3s;
     }
+
     button:hover {
       background-color: #1ebf54;
     }
+
     footer {
       margin-top: 50px;
       font-size: 0.9rem;
@@ -91,7 +103,7 @@
       <input type="color" id="textColor" value="#ffffff" />
 
       <h2>Tamanho do Texto</h2>
-      <input type="range" id="textSize" min="20" max="80" value="50" />
+      <input type="range" id="textSize" min="20" max="120" value="50" />
 
       <button onclick="generateWallpaper()">Gerar Wallpaper</button>
       <button onclick="downloadWallpaper()">Baixar Imagem</button>
@@ -134,27 +146,27 @@
     const canvas = document.getElementById('previewCanvas');
     const ctx = canvas.getContext('2d');
 
+    // Estado do texto
+    let textoUsuario = "";
+    let corTexto = "#ffffff";
+    let tamanhoTexto = 50;
+    let posX = canvas.width / 2;
+    let posY = canvas.height * 0.8;
+    let isDragging = false;
+
     function generateWallpaper() {
       const vencedor = document.getElementById("vencedor").value;
       const perdedor = document.getElementById("perdedor").value;
-      const text = document.getElementById("customText").value || "";
-      const color = document.getElementById("textColor").value;
-      const size = parseInt(document.getElementById("textSize").value);
-
-      let selectedImage = "";
+      textoUsuario = document.getElementById("customText").value || "";
+      corTexto = document.getElementById("textColor").value;
+      tamanhoTexto = parseInt(document.getElementById("textSize").value);
 
       if (vencedor && perdedor) {
         alert("Selecione apenas Vencedor ou Perdedor, não ambos.");
         return;
       }
 
-      if (vencedor) {
-        selectedImage = vencedor;
-      } else if (perdedor) {
-        selectedImage = perdedor;
-      } else {
-        selectedImage = "default.jpg";
-      }
+      let selectedImage = vencedor || perdedor || "default.jpg";
 
       const img = new Image();
       img.src = selectedImage;
@@ -163,19 +175,56 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-        ctx.fillStyle = color;
-        ctx.font = `${size}px Arial`;
-        ctx.textAlign = "center";
-        ctx.shadowColor = "#000";
-        ctx.shadowBlur = 10;
-
-        ctx.fillText(text, canvas.width / 2, canvas.height * 0.8);
+        desenharTexto();
       };
 
       img.onerror = () => {
         alert("Erro ao carregar a imagem: " + selectedImage + "\nVerifique se o arquivo existe na mesma pasta do index.html e se o nome está correto.");
       };
     }
+
+    function desenharTexto() {
+      ctx.fillStyle = corTexto;
+      ctx.font = `${tamanhoTexto}px Arial`;
+      ctx.textAlign = "center";
+      ctx.shadowColor = "#000";
+      ctx.shadowBlur = 10;
+
+      ctx.fillText(textoUsuario, posX, posY);
+    }
+
+    // Arrastar texto
+    canvas.addEventListener("mousedown", (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const textWidth = ctx.measureText(textoUsuario).width;
+      const textHeight = tamanhoTexto;
+
+      if (
+        x > posX - textWidth / 2 &&
+        x < posX + textWidth / 2 &&
+        y > posY - textHeight / 2 &&
+        y < posY + textHeight / 2
+      ) {
+        isDragging = true;
+      }
+    });
+
+    canvas.addEventListener("mousemove", (e) => {
+      if (!isDragging) return;
+
+      const rect = canvas.getBoundingClientRect();
+      posX = e.clientX - rect.left;
+      posY = e.clientY - rect.top;
+
+      generateWallpaper(); // Atualiza a posição do texto
+    });
+
+    window.addEventListener("mouseup", () => {
+      isDragging = false;
+    });
 
     function downloadWallpaper() {
       const link = document.createElement('a');
