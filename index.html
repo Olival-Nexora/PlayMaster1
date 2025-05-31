@@ -9,7 +9,7 @@
     body {
       margin: 0;
       font-family: 'Roboto', sans-serif;
-      background-color: #0e0e0e; 
+      background-color: #0e0e0e;
       color: #fff;
       padding: 20px;
       text-align: center;
@@ -80,30 +80,25 @@
 </head>
 <body>
 
-  <h1>Crie seu Wallpaper Personalizado</h1>
+  <h1>🏆 Crie seu Wallpaper - Brasileirão 2025</h1>
 
   <div class="container">
     <!-- Painel de Configuração -->
     <div class="left-panel">
-      <h2>Escolha seu Time</h2>
-      <select id="teamImage">
-        <option value="vasco.png">Vasco da Gama</option>
-        <option value="flamengo.png">Flamengo</option>
-        <option value="palmeiras.png">Palmeiras</option>
-        <option value="corinthians.png">Corinthians</option>
-        <option value="santos.png">Santos</option>
-        <option  value="cruzeiro.png">Cruzeiro</option>
-        <option value="default.jpg">Padrão (Esporte)</option>
-      </select>
+      <h2>Time Vencedor</h2>
+      <select id="vencedor"></select>
 
-      <h2>Texto no Wallpaper</h2>
-      <input type="text" id="customText" placeholder="Ex: Vamos Vasco!" />
+      <h2>Time Perdedor</h2>
+      <select id="perdedor"></select>
+
+      <h2>Escreva seu Texto (50 carac.)</h2>
+      <input type="text" id="customText" maxlength="50" placeholder="Ex: GOL DO FLAMENGO!" />
 
       <h2>Cor do Texto</h2>
       <input type="color" id="textColor" value="#ffffff" />
 
       <h2>Tamanho do Texto</h2>
-      <input type="range" id="textSize" min="20" max="60" value="40" />
+      <input type="range" id="textSize" min="20" max="80" value="50" />
 
       <button onclick="generateWallpaper()">Gerar Wallpaper</button>
       <button onclick="downloadWallpaper()">Baixar Imagem</button>
@@ -121,56 +116,86 @@
   </footer>
 
   <script>
+    const times = [
+      "Flamengo", "Fluminense", "Vasco", "Botafogo",
+      "Palmeiras", "Corinthians", "São Paulo", "Santos",
+      "Mirassol", "Bragantino", "Grêmio", "Internacional",
+      "Juventude", "Sport", "Bahia", "Vitória",
+      "Fortaleza", "Ceará", "Atlético Mineiro", "Cruzeiro"
+    ];
+
+    // Preencher selects
+    function carregarTimes() {
+      const selectVencedor = document.getElementById("vencedor");
+      const selectPerdedor = document.getElementById("perdedor");
+
+      times.forEach(time => {
+        const option1 = new Option(time, time.toLowerCase() + ".jpg");
+        const option2 = new Option(time, time.toLowerCase() + ".jpg");
+        selectVencedor.appendChild(option1);
+        selectPerdedor.appendChild(option2);
+      });
+    }
+
+    carregarTimes();
+
     const canvas = document.getElementById('previewCanvas');
     const ctx = canvas.getContext('2d');
 
-    const teamImage = new Image();
-    teamImage.src = 'default.jpg'; // Imagem inicial
+    const imgVencedor = new Image();
+    const imgPerdedor = new Image();
 
-    const teamSelect = document.getElementById('teamImage');
-    const customText = document.getElementById('customText');
-    const textColor = document.getElementById('textColor');
-    const textSize = document.getElementById('textSize');
-
-    teamSelect.addEventListener('change', () => {
-      teamImage.src = teamSelect.value;
-      generateWallpaper();
-    });
-
-    customText.addEventListener('input', generateWallpaper);
-    textColor.addEventListener('input', generateWallpaper);
-    textSize.addEventListener('input', generateWallpaper);
+    imgVencedor.src = 'default.jpg';
+    imgPerdedor.src = 'default.jpg';
 
     function generateWallpaper() {
-      const text = customText.value || "Seu Time";
-      const color = textColor.value;
-      const size = parseInt(textSize.value);
+      const vencedor = document.getElementById("vencedor").value;
+      const perdedor = document.getElementById("perdedor").value;
+      const text = document.getElementById("customText").value || "";
+      const color = document.getElementById("textColor").value;
+      const size = parseInt(document.getElementById("textSize").value);
 
-      teamImage.onload = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      imgVencedor.src = `vencedores/${vencedor}`;
+      imgPerdedor.src = `perdedores/${perdedor}`;
 
-        // Desenha imagem de fundo
-        ctx.drawImage(teamImage, 0, 0, canvas.width, canvas.height);
+      let loaded = 0;
 
-        // Configura texto
-        ctx.fillStyle = color;
-        ctx.font = `${size}px Arial`;
-        ctx.textAlign = 'center';
-        ctx.shadowColor = '#000';
-        ctx.shadowBlur = 10;
+      [imgVencedor, imgPerdedor].forEach(img => {
+        img.onload = () => {
+          loaded++;
+          if (loaded === 2) {
+            ctx.fillStyle = "#000";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Posição centralizada
-        const y = canvas.height * 0.8;
-        ctx.fillText(text, canvas.width / 2, y);
-      };
+            ctx.drawImage(imgVencedor, 0, 0, canvas.width / 2, canvas.height);
+            ctx.drawImage(imgPerdedor, canvas.width / 2, 0, canvas.width / 2, canvas.height);
+
+            ctx.fillStyle = color;
+            ctx.font = `${size}px Arial`;
+            ctx.textAlign = "center";
+            ctx.shadowColor = "#000";
+            ctx.shadowBlur = 10;
+
+            const y = canvas.height * 0.8;
+            ctx.fillText(text, canvas.width / 2, y);
+          }
+        };
+      });
     }
 
     function downloadWallpaper() {
       const link = document.createElement('a');
-      link.download = 'meu-wallpaper-streamdroid.png';
+      link.download = 'meu-wallpaper-brasileirao.png';
       link.href = canvas.toDataURL('image/png');
       link.click();
     }
+
+    // Eventos
+    document.getElementById("vencedor").addEventListener("change", generateWallpaper);
+    document.getElementById("perdedor").addEventListener("change", generateWallpaper);
+    document.getElementById("customText").addEventListener("input", generateWallpaper);
+    document.getElementById("textColor").addEventListener("input", generateWallpaper);
+    document.getElementById("textSize").addEventListener("input", generateWallpaper);
   </script>
 
 </body>
