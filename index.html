@@ -4,8 +4,264 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Crie seu Wallpaper - StreamDroid</title>
+esse codigo nao esta gerando wallpaper porque. <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crie seu Wallpaper - StreamDroid</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Oswald:wght@500&family=Ubuntu&display=swap" rel="stylesheet">
   <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: #0e0e0e; 
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .left-panel, .right-panel {
+      background: #1c1c1c;
+      padding: 20px;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 450px;
+    }
+
+    select, input[type="text"], input[type="color"], input[type="range"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: none;
+      font-size: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    canvas {
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+      border-radius: 10px;
+      margin-top: 20px;
+      cursor: move;
+      touch-action: none;
+    }
+
+    button {
+      background-color: #25d366;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #1ebf54;
+    }
+
+    footer {
+      margin-top: 50px;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Crie seu Wallpaper Personalizado</h1>
+
+  <div class="container">
+    <!-- Painel de Configuração -->
+    <div class="left-panel">
+      <h2>Escolha um Time</h2>
+      <select id="teamImage">
+        <option value="flamengo.jpg">Flamengo</option>
+        <option value="palmeiras.jpg">Palmeiras</option>
+        <option value="sport.jpg">Sport</option>
+        <option value="juventude.jpg">Juventude</option>
+        <option value="gremio.jpg">Grêmio</option>
+        <option value="internacional.jpg">Internacional</option>
+        <option value="vasco.jpg">Vasco da Gama</option>
+        <option value="fluminense.jpg">Fluminense</option>
+        <option value="botafogo.jpg">Botafogo</option>
+        <option value="santos.jpg">Santos</option>
+        <option value="corinthians.jpg">Corinthians</option>
+        <option value="saopaulo.jpg">São Paulo</option>
+        <option value="cruzeiro.jpg">Cruzeiro</option>
+        <option value="bahia.jpg">Bahia</option>
+        <option value="vitoria.jpg">Vitória</option>
+        <option value="ceara.jpg">Ceará</option>
+        <option value="fortaleza.jpg">Fortaleza</option>
+        <option value="mirassol.jpg">Mirassol</option>
+        <option value="atletico.jpg">Atlético Mineiro</option>
+        <option value="bragantino.jpg">Bragantino</option>
+      </select>
+
+      <h2>Ou escolha um fundo</h2>
+      <select id="backgroundImage">
+        <option value="fundo1.jpg">Fundo 1</option>
+        <option value="fundo2.jpg">Fundo 2</option>
+        <option value="fundo3.jpg">Fundo 3</option>
+        <option value="fundo4.jpg">Fundo 4</option>
+        <option value="fundo5.jpg">Fundo 5</option>
+      </select>
+
+      <h2>Texto no Wallpaper</h2>
+      <input type="text" id="customText" placeholder="Ex: Vamos Vasco!" />
+
+      <h2>Cor do Texto</h2>
+      <input type="color" id="textColor" value="#ffffff" />
+
+      <label for="fontFamily">Escolha uma Fonte:</label>
+      <select id="fontFamily">
+        <option value="'Roboto', sans-serif">Roboto</option>
+        <option value="'Oswald', sans-serif">Oswald</option>
+        <option value="'Ubuntu', sans-serif">Ubuntu</option>
+      </select>
+
+      <label for="textSize">Tamanho do Texto:</label>
+      <input type="range" id="textSize" min="20" max="80" value="40" />
+
+      <button onclick="generateWallpaper()">Gerar Wallpaper</button>
+      <button onclick="downloadWallpaper()">Baixar Imagem</button>
+    </div>
+
+    <!-- Preview do Wallpaper -->
+    <div class="right-panel">
+      <h2>Visualização</h2>
+      <canvas id="previewCanvas" width="1080" height="1350"></canvas>
+      <p><small>Clique e arraste o texto para ajustar a posição</small></p>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 StreamDroid | Crie seu wallpaper esportivo personalizado.
+  </footer>
+
+  <script>
+    const canvas = document.getElementById('previewCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const teamSelect = document.getElementById('teamImage');
+    const backgroundSelect = document.getElementById('backgroundImage');
+    const customText = document.getElementById('customText');
+    const textColor = document.getElementById('textColor');
+    const fontFamily = document.getElementById('fontFamily');
+    const textSize = document.getElementById('textSize');
+
+    let currentImage = new Image();
+    currentImage.src = 'default.jpg';
+
+    let drag = false;
+    let offsetX = 0, offsetY = 0;
+    let textX = canvas.width / 2, textY = canvas.height * 0.8;
+
+    // Carregar imagem inicial
+    window.onload = () => {
+      generateWallpaper();
+    };
+
+    function generateWallpaper() {
+      const text = customText.value || "Seu Time";
+      const color = textColor.value;
+      const font = fontFamily.value;
+      const size = parseInt(textSize.value);
+
+      const imgSrc = backgroundSelect.value ? backgroundSelect.value : teamSelect.value;
+      currentImage.src = imgSrc;
+
+      currentImage.onload = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(currentImage, 0, 0, canvas.width, canvas.height);
+
+        drawText(text, color, font, size);
+      };
+    }
+
+    function drawText(text, color, font, size) {
+      ctx.font = `${size}px ${font}`;
+      ctx.fillStyle = color;
+      ctx.textAlign = 'center';
+      ctx.shadowColor = '#000';
+      ctx.shadowBlur = 10;
+      ctx.fillText(text, textX, textY);
+    }
+
+    // Arrastar texto
+    canvas.addEventListener('mousedown', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      const textWidth = ctx.measureText(customText.value).width;
+      if (
+        mouseX > textX - textWidth / 2 &&
+        mouseX < textX + textWidth / 2 &&
+        mouseY > textY - 20 &&
+        mouseY < textY + 10
+      ) {
+        drag = true;
+        offsetX = mouseX - textX;
+        offsetY = mouseY - textY;
+      }
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+      if (drag) {
+        const rect = canvas.getBoundingClientRect();
+        textX = e.clientX - rect.left - offsetX;
+        textY = e.clientY - rect.top - offsetY;
+        generateWallpaper();
+      }
+    });
+
+    window.addEventListener('mouseup', () => {
+      drag = false;
+    });
+
+    function downloadWallpaper() {
+      const link = document.createElement('a');
+      link.download = 'meu-wallpaper-streamdroid.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    // Eventos de atualização
+    teamSelect.addEventListener('change', generateWallpaper);
+    backgroundSelect.addEventListener('change', generateWallpaper);
+    customText.addEventListener('input', generateWallpaper);
+    textColor.addEventListener('input', generateWallpaper);
+    fontFamily.addEventListener('change', generateWallpaper);
+    textSize.addEventListener('input', generateWallpaper);
+  </script>
+
+</body>
+</html>  <style>
     body {
       margin: 0;
       font-family: 'Roboto', sans-serif;
