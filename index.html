@@ -1,4 +1,4 @@
-<A!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -14,12 +14,10 @@
       padding: 20px;
       text-align: center;
     }
-
     h1 {
       font-size: 2rem;
       margin-bottom: 20px;
     }
-
     .container {
       max-width: 900px;
       margin: auto;
@@ -29,7 +27,6 @@
       justify-content: center;
       align-items: flex-start;
     }
-
     .left-panel, .right-panel {
       background: #1c1c1c;
       padding: 20px;
@@ -37,7 +34,6 @@
       width: 100%;
       max-width: 400px;
     }
-
     select, input[type="text"], input[type="color"], input[type="range"] {
       width: 100%;
       padding: 10px;
@@ -46,7 +42,6 @@
       border: none;
       font-size: 1rem;
     }
-
     canvas {
       width: 100%;
       max-width: 400px;
@@ -55,7 +50,6 @@
       margin-top: 20px;
       cursor: grab;
     }
-
     button {
       background-color: #25d366;
       color: white;
@@ -67,11 +61,9 @@
       margin-top: 15px;
       transition: background 0.3s;
     }
-
     button:hover {
       background-color: #1ebf54;
     }
-
     footer {
       margin-top: 50px;
       font-size: 0.9rem;
@@ -81,186 +73,184 @@
 </head>
 <body>
 
-  <h1>🏆 Crie seu Wallpaper - Brasileirão 2025</h1>
+<h1>🏆 Crie seu Wallpaper - Brasileirão 2025</h1>
 
-  <div class="container">
-    <!-- Painel de Configuração -->
-    <div class="left-panel">
-      <h2>Time Vencedor</h2>
-      <select id="vencedor">
-        <option value="">-- Selecione --</option>
-      </select>
+<div class="container">
+  <div class="left-panel">
+    <h2>Time Vencedor</h2>
+    <select id="vencedor">
+      <option value="">-- Selecione --</option>
+    </select>
 
-      <h2>Time Perdedor</h2>
-      <select id="perdedor">
-        <option value="">-- Selecione --</option>
-      </select>
+    <h2>Time Perdedor</h2>
+    <select id="perdedor">
+      <option value="">-- Selecione --</option>
+    </select>
 
-      <h2>Escreva seu Texto (50 carac.)</h2>
-      <input type="text" id="customText" maxlength="50" placeholder="Ex: GOL DO FLAMENGO!" />
+    <h2>Escreva seu Texto (50 carac.)</h2>
+    <input type="text" id="customText" maxlength="50" placeholder="Ex: GOL DO FLAMENGO!" />
 
-      <h2>Cor do Texto</h2>
-      <input type="color" id="textColor" value="#ffffff" />
+    <h2>Cor do Texto</h2>
+    <input type="color" id="textColor" value="#ffffff" />
 
-      <h2>Tamanho do Texto</h2>
-      <input type="range" id="textSize" min="20" max="120" value="50" />
+    <h2>Tamanho do Texto</h2>
+    <input type="range" id="textSize" min="20" max="120" value="50" />
 
-      <h2>Estilo da Fonte</h2>
-      <select id="fontFamily">
-        <option value="'Arial Black', Arial">Arial Bold</option>
-        <option value="'Comic Sans MS', cursive">Comic Sans MS</option>
-        <option value="'Impact', Charcoal">Impact</option>
-        <option value="'Montserrat', sans-serif">Montserrat Bold</option>
-        <option value="'Orbitron', sans-serif">Orbitron</option>
-        <option value="'Fredoka One', cursive">Fredoka One</option>
-      </select>
+    <h2>Estilo da Fonte</h2>
+    <select id="fontFamily">
+      <option value="'Arial Black', Arial">Arial Bold</option>
+      <option value="'Comic Sans MS', cursive">Comic Sans MS</option>
+      <option value="'Impact', Charcoal">Impact</option>
+      <option value="'Montserrat', sans-serif">Montserrat Bold</option>
+      <option value="'Orbitron', sans-serif">Orbitron</option>
+      <option value="'Fredoka One', cursive">Fredoka One</option>
+    </select>
 
-      <button onclick="generateWallpaper()">Gerar Wallpaper</button>
-      <button onclick="downloadWallpaper()">Baixar Imagem</button>
-    </div>
-
-    <!-- Preview do Wallpaper -->
-    <div class="right-panel">
-      <h2>Visualização</h2>
-      <canvas id="previewCanvas" width="1080" height="1350"></canvas>
-    </div>
+    <button onclick="generateWallpaper()">Gerar Wallpaper</button>
+    <button onclick="downloadWallpaper()">Baixar Imagem</button>
   </div>
 
-  <footer>
-    &copy; 2025 StreamDroid | Crie seu wallpaper esportivo personalizado.
-  </footer>
+  <div class="right-panel">
+    <h2>Visualização</h2>
+    <canvas id="previewCanvas" width="1080" height="1350"></canvas>
+  </div>
+</div>
 
-  <script>
-    const times = [
-      "Flamengo", "Fluminense", "Vasco", "Botafogo",
-      "Palmeiras", "Corinthians", "São Paulo", "Santos",
-      "Mirassol", "Bragantino", "Grêmio", "Internacional",
-      "Juventude", "Sport", "Bahia", "Vitória",
-      "Fortaleza", "Ceará", "Atlético Mineiro", "Cruzeiro"
-    ];
+<footer>
+  &copy; 2025 StreamDroid | Crie seu wallpaper esportivo personalizado.
+</footer>
 
-    function carregarTimes() {
-      const selectV = document.getElementById("vencedor");
-      const selectP = document.getElementById("perdedor");
+<script>
+const times = [
+  "Flamengo", "Fluminense", "Vasco", "Botafogo",
+  "Palmeiras", "Corinthians", "São Paulo", "Santos",
+  "Mirassol", "Bragantino", "Grêmio", "Internacional",
+  "Juventude", "Sport", "Bahia", "Vitória",
+  "Fortaleza", "Ceará", "Atlético Mineiro", "Cruzeiro"
+];
 
-      times.forEach(time => {
-        const optV = new Option(time, time.toLowerCase() + "V.jpg");
-        const optP = new Option(time, time.toLowerCase() + "P.jpg");
-        selectV.appendChild(optV);
-        selectP.appendChild(optP);
-      });
-    }
+function carregarTimes() {
+  const selectV = document.getElementById("vencedor");
+  const selectP = document.getElementById("perdedor");
 
-    carregarTimes();
+  times.forEach(time => {
+    const optV = new Option(time, time.toLowerCase() + "V.jpg");
+    const optP = new Option(time, time.toLowerCase() + "P.jpg");
+    selectV.appendChild(optV);
+    selectP.appendChild(optP);
+  });
+}
 
-    const canvas = document.getElementById('previewCanvas');
-    const ctx = canvas.getContext('2d');
+carregarTimes();
 
-    // Estado do texto
-    let textoUsuario = "";
-    let corTexto = "#ffffff";
-    let tamanhoTexto = 50;
-    let fonteTexto = "'Arial Black', Arial";
-    let posX = canvas.width / 2;
-    let posY = canvas.height * 0.8;
-    let isDragging = false;
+const canvas = document.getElementById('previewCanvas');
+const ctx = canvas.getContext('2d');
 
-    function updatePreview() {
-      textoUsuario = document.getElementById("customText").value || "";
-      corTexto = document.getElementById("textColor").value;
-      tamanhoTexto = parseInt(document.getElementById("textSize").value);
-      fonteTexto = document.getElementById("fontFamily").value;
+let textoUsuario = "";
+let corTexto = "#ffffff";
+let tamanhoTexto = 50;
+let fonteTexto = "'Arial Black', Arial";
+let posX = canvas.width / 2;
+let posY = canvas.height * 0.8;
+let isDragging = false;
 
-      const vencedor = document.getElementById("vencedor").value;
-      const perdedor = document.getElementById("perdedor").value;
+let currentImage = new Image();
+currentImage.src = "default.jpg";
 
-      if (vencedor && perdedor) {
-        alert("Selecione apenas Vencedor ou Perdedor, não ambos.");
-        return;
-      }
+function updatePreview() {
+  textoUsuario = document.getElementById("customText").value || "";
+  corTexto = document.getElementById("textColor").value;
+  tamanhoTexto = parseInt(document.getElementById("textSize").value);
+  fonteTexto = document.getElementById("fontFamily").value;
 
-      let selectedImage = vencedor || perdedor || "default.jpg";
+  const vencedor = document.getElementById("vencedor").value;
+  const perdedor = document.getElementById("perdedor").value;
 
-      const img = new Image();
-      img.src = selectedImage;
+  if (vencedor && perdedor) {
+    alert("Selecione apenas Vencedor ou Perdedor, não ambos.");
+    return;
+  }
 
-      img.onload = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        desenharTexto();
-      };
+  let selectedImage = vencedor || perdedor || "default.jpg";
 
-      img.onerror = () => {
-        alert("Erro ao carregar a imagem: " + selectedImage + "\nVerifique se o arquivo existe na mesma pasta do index.html e se o nome está correto.");
-      };
-    }
+  currentImage.src = selectedImage;
+  currentImage.onload = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(currentImage, 0, 0, canvas.width, canvas.height);
+    desenharTexto();
+  };
 
-    function desenharTexto() {
-      ctx.fillStyle = corTexto;
-      ctx.font = `${tamanhoTexto}px ${fonteTexto}`;
-      ctx.textAlign = "center";
-      ctx.shadowColor = "#000";
-      ctx.shadowBlur = 10;
+  currentImage.onerror = () => {
+    alert("Erro ao carregar a imagem: " + selectedImage + "\nVerifique se o arquivo existe na mesma pasta do index.html e se o nome está correto.");
+  };
+}
 
-      ctx.fillText(textoUsuario, posX, posY);
-    }
+function desenharTexto() {
+  ctx.drawImage(currentImage, 0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = corTexto;
+  ctx.font = `${tamanhoTexto}px ${fonteTexto}`;
+  ctx.textAlign = "center";
+  ctx.shadowColor = "#000";
+  ctx.shadowBlur = 10;
+  ctx.fillText(textoUsuario, posX, posY);
+}
 
-    // Arrastar texto
-    canvas.addEventListener("mousedown", (e) => {
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+// Eventos de arrastar
+canvas.addEventListener("mousedown", (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
 
-      const metrics = ctx.measureText(textoUsuario);
-      const textWidth = metrics.width;
-      const textHeight = tamanhoTexto;
+  const metrics = ctx.measureText(textoUsuario);
+  const textWidth = metrics.width;
+  const textHeight = tamanhoTexto;
 
-      const minX = posX - textWidth / 2;
-      const maxX = posX + textWidth / 2;
-      const minY = posY - textHeight / 2;
-      const maxY = posY + textHeight / 2;
+  const minX = posX - textWidth / 2;
+  const maxX = posX + textWidth / 2;
+  const minY = posY - textHeight;
+  const maxY = posY;
 
-      if (x >= minX && x <= maxX && y >= minY && y <= maxY) {
-        isDragging = true;
-      }
-    });
+  if (x >= minX && x <= maxX && y >= minY && y <= maxY) {
+    isDragging = true;
+  }
+});
 
-    canvas.addEventListener("mousemove", (e) => {
-      if (!isDragging) return;
+canvas.addEventListener("mousemove", (e) => {
+  if (!isDragging) return;
 
-      const rect = canvas.getBoundingClientRect();
-      posX = e.clientX - rect.left;
-      posY = e.clientY - rect.top;
+  const rect = canvas.getBoundingClientRect();
+  posX = e.clientX - rect.left;
+  posY = e.clientY - rect.top;
 
-      updatePreview(); // Atualiza a posição do texto
-    });
+  // Apenas redesenha o texto
+  desenharTexto();
+});
 
-    window.addEventListener("mouseup", () => {
-      isDragging = false;
-    });
+window.addEventListener("mouseup", () => {
+  isDragging = false;
+});
 
-    function generateWallpaper() {
-      updatePreview();
-    }
+function generateWallpaper() {
+  updatePreview();
+}
 
-    function downloadWallpaper() {
-      const link = document.createElement('a');
-      link.download = 'meu-wallpaper-brasileirao.png';
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-    }
+function downloadWallpaper() {
+  const link = document.createElement('a');
+  link.download = 'meu-wallpaper-brasileirao.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
 
-    // Eventos automáticos
-    document.getElementById("vencedor").addEventListener("change", updatePreview);
-    document.getElementById("perdedor").addEventListener("change", updatePreview);
-    document.getElementById("customText").addEventListener("input", updatePreview);
-    document.getElementById("textColor").addEventListener("input", updatePreview);
-    document.getElementById("textSize").addEventListener("input", updatePreview);
-    document.getElementById("fontFamily").addEventListener("change", updatePreview);
+// Eventos automáticos
+document.getElementById("vencedor").addEventListener("change", updatePreview);
+document.getElementById("perdedor").addEventListener("change", updatePreview);
+document.getElementById("customText").addEventListener("input", desenharTexto);
+document.getElementById("textColor").addEventListener("input", desenharTexto);
+document.getElementById("textSize").addEventListener("input", desenharTexto);
+document.getElementById("fontFamily").addEventListener("change", desenharTexto);
 
-    // Inicializar
-    window.onload = updatePreview;
-  </script>
+window.onload = updatePreview;
 
+</script>
 </body>
 </html>
