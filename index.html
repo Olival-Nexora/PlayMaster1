@@ -9,7 +9,7 @@
     body {
       margin: 0;
       font-family: 'Roboto', sans-serif;
-      background-color: #0e0e0e; 
+      background-color: #0e0e0e;   
       color: #fff;
       padding: 20px;
       text-align: center;
@@ -58,8 +58,14 @@
       margin-top: 15px;
       transition: background 0.3s;
     }
-    button:hover { background-color: #1ebf54; }
-    footer { margin-top: 50px; font-size: 0.9rem; color: #aaa; }
+    button:hover {
+      background-color: #1ebf54;
+    }
+    footer {
+      margin-top: 50px;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
   </style>
 </head>
 <body>
@@ -124,8 +130,8 @@
     const selectP = document.getElementById("perdedor");
 
     times.forEach(time => {
-      const optV = new Option(time, time.toLowerCase() + "V.jpg");
-      const optP = new Option(time, time.toLowerCase() + "P.jpg");
+      const optV = new Option(time, time.toLowerCase() + "V.png");
+      const optP = new Option(time, time.toLowerCase() + "P.png");
       selectV.appendChild(optV);
       selectP.appendChild(optP);
     });
@@ -142,7 +148,7 @@
     let isDragging = false;
 
     let currentImage = new Image();
-    currentImage.src = "default.jpg";
+    currentImage.src = "default.png";
 
     currentImage.onload = () => {
       updatePreview();
@@ -162,7 +168,7 @@
         return;
       }
 
-      const selectedImage = vencedor || perdedor || "default.jpg";
+      const selectedImage = vencedor || perdedor || "default.png";
 
       if (currentImage.src !== selectedImage) {
         currentImage = new Image();
@@ -200,8 +206,8 @@
 
       const minX = posX - textWidth / 2;
       const maxX = posX + textWidth / 2;
-      const minY = posY - textHeight;
-      const maxY = posY;
+      const minY = posY - textHeight / 2;
+      const maxY = posY + textHeight / 2;
 
       if (x >= minX && x <= maxX && y >= minY && y <= maxY) {
         isDragging = true;
@@ -216,7 +222,7 @@
       drawCanvas();
     });
 
-    window.addEventListener("mouseup", function() {
+    window.addEventListener("mouseup", () => {
       isDragging = false;
     });
 
